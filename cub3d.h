@@ -6,7 +6,7 @@
 /*   By: yhachami <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:07:33 by yhachami          #+#    #+#             */
-/*   Updated: 2023/07/24 20:09:27 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/08/08 19:55:28 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,14 @@
 # include <limits.h>
 # include "MLX42/include/MLX42/MLX42.h"
 
-# define WIDTH 1000
-# define HEIGHT 720
+# define WIDTH 1920
+# define HEIGHT 1080
 # define DEFAULT_COLOR "0xFFFFFFFF"
 # define PI 3.14159265359
 # define P2 1.57079632679
 # define P3 4.71238898038
 # define DR 0.0174533
+# define TR 57.2957795131
 
 typedef struct s_rgb {
         int     r;
@@ -81,18 +82,19 @@ typedef struct	s_map {
 
 typedef	struct	s_player {
 	t_vector2f	pos;
+	t_vector2f	ray;
 	float		rot;
 }		t_player;
 
 typedef struct s_game {
-	t_map		map;
-        t_player	player;
-	int		tile_size;
-	int		column_size;
-	int		fov;
-	mlx_t                   *mlx;
-        mlx_image_t             *img;
-        mlx_image_t             *ui[30];
+	t_map			map;
+	t_player		player;
+	int				tile_size;
+	int				column_size;
+	int				fov;
+	mlx_t			*mlx;
+	mlx_image_t		*img;
+	mlx_image_t		*ui[30];
 }               t_game;
 
 char	*get_next_line(int fd);
