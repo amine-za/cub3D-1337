@@ -6,7 +6,7 @@
 /*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:05:54 by yhachami          #+#    #+#             */
-/*   Updated: 2023/08/14 12:25:10 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/08/19 01:55:03 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	read_map(t_game *game, char **av)
 	game->column_size = 5;
 	//game->column_size = WIDTH / game->fov;
 	//game->ray_step = 1;
-	game->ray_step = (float) game->fov / (WIDTH / game->column_size);
 	game->tile_size = 50;
 	// tex
 	game->map.tex[0] = mlx_load_png("./tex.png");
@@ -47,6 +46,8 @@ void	read_map(t_game *game, char **av)
 	game->map.col[0] = 0x2E1A47FF;
 	game->map.col[1] = 0x1E3226FF;
 	// read map.cub file
+	game->map.size.x = 50;
+	game->map.size.y = 50;
 	x = 50;
 	y = 50;
 	game->map.map = (int **) malloc(y * sizeof(int *));
@@ -84,7 +85,34 @@ void	read_map(t_game *game, char **av)
 	printf("player (%f, %f)\n", game->player.pos.x, game->player.pos.y);
 }
 
-void	draw_cube(t_game *game, t_vector2i start, t_vector2i end, int color)
+void    draw_line1(mlx_image_t *img, t_vector2f p0, t_vector2f p1)
+{
+        t_vector3f      v;
+        t_vector3f      d;
+        int             i;
+
+        v.x = p0.x;
+        v.y = p0.y;
+        d.x = p1.x - p0.x;
+        d.y = p1.y - p0.y;
+        d.z = d.y / d.x;
+        if (fabs(d.x) >= fabs(d.y))
+                d.z = fabs(d.x);
+        else
+                d.z = fabs(d.y);
+        d.x = d.x / d.z;
+        d.y = d.y / d.z;
+        i = 1;
+        while (i <= d.z)
+        {
+                mlx_put_pixel(img, v.x, v.y, 0xff0000ff);
+                v.x = v.x + d.x;
+                v.y = v.y + d.y;
+                i++;
+        }
+}
+
+void	draw_cube(mlx_image_t *img, t_vector2i start, t_vector2i end, int color)
 {
 	t_vector2i	v;
 
@@ -92,7 +120,7 @@ void	draw_cube(t_game *game, t_vector2i start, t_vector2i end, int color)
 	v.y = start.y;
 	while (v.x < end.x)
 	{
-		mlx_put_pixel(game->img, v.x, v.y, color);
+		mlx_put_pixel(img, v.x, v.y, color);
 		v.y++;
 		if (v.y == end.y)
 		{
@@ -102,7 +130,59 @@ void	draw_cube(t_game *game, t_vector2i start, t_vector2i end, int color)
 	}
 }
 
-void	draw_colum(t_game *game, int x, int faraway, int col)
+bool draw_texture(t_game *game, uint32_t xy[2], uint32_t wh[2], t_vector2i a, t_vector2i b, t_ray ray)
+{
+	mlx_image_t* image;
+	mlx_texture_t* texture;
+	uint32_t xx;
+	uint32_t yy;
+	uint8_t* pixelx;
+	uint8_t* pixeli;
+	uint32_t i;
+	uint32_t j;
+	uint32_t z;
+	float	r;
+	float	rr;
+	int		h;
+
+	image = game->img;
+	texture = game->map.tex[0];
+	xx = a.x;
+	yy = a.y;
+	while (xy[0] > texture->width)
+		xy[0] -= texture->width;
+
+	//h = ray.dst;	
+	h = (game->tile_size * HEIGHT) / ray.dst;
+
+	r = (float) texture->height / h;
+
+	//printf("r = %f, h = %d\n", r, h);
+	//printf("a = %d, %d\n", a.x, a.y);
+	//printf("b = %d, %d\n", b.x, b.y);
+	//j = 0;
+	//while (j < b.y)
+	//{
+		i = 0;
+		z = 0;
+		while (i < wh[1])
+		{
+			//rr = (float) z / r;
+			rr = (float) z * r;
+			pixelx = &texture->pixels[((((xy[1] + (int) rr) * texture->width) + (xy[0] ))) * texture->bytes_per_pixel];
+			pixeli = &image->pixels[((yy + i) * image->width + xx) * texture->bytes_per_pixel];
+			memmove(pixeli, pixelx, wh[0] * texture->bytes_per_pixel);
+			i++;
+			z++;
+			if (rr > texture->height)
+				z = 0;
+		}
+	//	j++;
+	//}
+	return (true);
+}
+
+int	draw_colum(t_game *game, int x, t_ray ray)
 {
 	t_vector2i	a;
 	t_vector2i	b;
@@ -116,31 +196,37 @@ void	draw_colum(t_game *game, int x, int faraway, int col)
 	// column
 	s = game->tile_size;
 	c = game->column_size;
-	h = faraway;
-	if (h > HEIGHT / 2)
-		h = HEIGHT / 2;
+	//h = ray.dst;
+	h = (game->tile_size * HEIGHT) /ray.dst;
+	if (h > HEIGHT)
+		h = HEIGHT;
 	a.x = x;
-	a.y = h;
+	a.y = (HEIGHT / 2) - (h / 2);
+	//a.y = h / 2;
+
 	b.x = x + c;
-	b.y = HEIGHT - h + 1;
-	//printf("x = %d, d = %d, h = %d\n",x, faraway, h);
-	//printf("a = x = %d, y = %d\n", a.x, a.y);
-	//printf("b = x = %d, y = %d\n", b.x, b.y);
-	xy[0] = 1;
-	xy[1] = 1;
-	wh[0] = 5;
-	wh[1] = 400;
-	//game->map.tex_img[0][x] = mlx_texture_area_to_image(game->mlx, game->map.tex[0], xy, wh);
-	//if (mlx_image_to_window(game->mlx, game->map.tex_img[0][x], a.x, a.y) < 0)
-    //   return ;
-	if (a.x > 0 && a.x < WIDTH - 10 && b.x > 0 && b.y < HEIGHT - 10)
-	{
-		draw_cube(game, a, b, col);
-	//	mlx_draw_texture(game->img, game->map.tex[0], a.x, a.y);
+	b.y = (HEIGHT / 2) + (h / 2);
+	//b.y = HEIGHT - (h / 2) + 1;
+
+	if (a.y < 5)
+		a.y = 5;
+	if (b.y > HEIGHT - 5)
+		b.y = HEIGHT - 5;
+	xy[0] = a.x;
+	xy[1] = 0;
+	wh[0] = 1;
+	wh[1] = h;
+	//wh[1] = b.y - h;
+	if (a.x > 0 && a.x < WIDTH && a.y > 0 && a.y < HEIGHT
+			&& b.x > 0 && b.x < WIDTH && b.y > 0 && b.y < HEIGHT)
+	{	
+		draw_cube(game->img, a, b, 0xCCBBAA);
+		draw_texture(game, xy, wh, a, b, ray);
 	}
+	return (0);
 }
 
-void	horizon_ray(t_game *game, t_vector2f *ray, t_vector2f *step, float ray_angel)
+void	horizon_ray(t_game *game, t_ray *ray)
 {
 	t_vector2f	p;
 	int			ts;
@@ -148,24 +234,24 @@ void	horizon_ray(t_game *game, t_vector2f *ray, t_vector2f *step, float ray_ange
 
 	p = game->player.pos;
 	ts = game->tile_size;
-	arctan = -1 / tan(ray_angel * DR);
-	if (ray_angel > 180)
+	arctan = -1 / tan(ray->angel * DR);
+	if (ray->angel > 180)
 	{
-		ray->y = ((int) p.y / ts) * ts - 0.001;
-		ray->x = (p.y - ray->y) * arctan + p.x;
-		step->y = -ts;
-		step->x = -step->y * arctan;
+		ray->ray.y = ((int) p.y / ts) * ts - 0.001;
+		ray->ray.x = (p.y - ray->ray.y) * arctan + p.x;
+		ray->step.y = -ts;
+		ray->step.x = -ray->step.y * arctan;
 	}
-	else if (ray_angel < 180)
+	else if (ray->angel < 180)
 	{
-		ray->y = ((int) p.y / ts) * ts + ts;
-		ray->x = (p.y - ray->y) * arctan + p.x;
-		step->y = ts;
-		step->x = -step->y * arctan;
+		ray->ray.y = ((int) p.y / ts) * ts + ts;
+		ray->ray.x = (p.y - ray->ray.y) * arctan + p.x;
+		ray->step.y = ts;
+		ray->step.x = -ray->step.y * arctan;
 	}
 }
 
-void	vertical_ray(t_game *game, t_vector2f *ray, t_vector2f *step, float ray_angel)
+void	vertical_ray(t_game *game, t_ray *ray)
 {
 	t_vector2f	p;
 	int			ts;
@@ -173,24 +259,24 @@ void	vertical_ray(t_game *game, t_vector2f *ray, t_vector2f *step, float ray_ang
 
 	p = game->player.pos;
 	ts = game->tile_size;
-	arctan = -tan(ray_angel * DR);
-	if (ray_angel > 90 && ray_angel < 270)
+	arctan = -tan(ray->angel * DR);
+	if (ray->angel > 90 && ray->angel < 270)
 	{
-		ray->x = ((int) p.x / ts) * ts - 0.001;
-		ray->y = (p.x - ray->x) * arctan + p.y;
-		step->x = -ts;
-		step->y = -step->x * arctan;
+		ray->ray.x = ((int) p.x / ts) * ts - 0.001;
+		ray->ray.y = (p.x - ray->ray.x) * arctan + p.y;
+		ray->step.x = -ts;
+		ray->step.y = -ray->step.x * arctan;
 	}
-	else if (ray_angel < 90 || ray_angel > 270)
+	else if (ray->angel < 90 || ray->angel > 270)
 	{
-		ray->x = ((int) p.x / ts) * ts + ts;
-		ray->y = (p.x - ray->x) * arctan + p.y;
-		step->x = ts;
-		step->y = -step->x * arctan;
+		ray->ray.x = ((int) p.x / ts) * ts + ts;
+		ray->ray.y = (p.x - ray->ray.x) * arctan + p.y;
+		ray->step.x = ts;
+		ray->step.y = -ray->step.x * arctan;
 	}
 }
 
-t_vector2f	cast_rays(t_game *game, int dof, t_vector2f ray, t_vector2f step)
+t_vector2f	cast_rays(t_game *game, int dof, t_ray ray)
 {
 	t_vector2f	outray;
 	t_vector2i	tile;
@@ -200,19 +286,19 @@ t_vector2f	cast_rays(t_game *game, int dof, t_vector2f ray, t_vector2f step)
 	//outray = ray;
 	while (dof > 0)
 	{
-		tile.x = ray.x / ts;
-		tile.y = ray.y / ts;
-		if (tile.x >= 0 && tile.y >= 0 && tile.x < 50 && tile.y < 50
-				&& game->map.map[tile.x][tile.y] == 1)
+		ray.tile.x = ray.ray.x / ts;
+		ray.tile.y = ray.ray.y / ts;
+		if (ray.tile.x >= 0 && ray.tile.y >= 0 && ray.tile.x < 50 && ray.tile.y < 50
+				&& game->map.map[ray.tile.x][ray.tile.y] == 1)
 		{
 			dof = 0;
-			outray = ray;
+			outray = ray.ray;
 		}
 		else
 		{
 			dof--;
-			ray.x += step.x;
-			ray.y += step.y;
+			ray.ray.x += ray.step.x;
+			ray.ray.y += ray.step.y;
 		}
 	}
 	return (outray);
@@ -230,78 +316,73 @@ void	draw_rays(t_game *game, t_vector2f ray)
 	pp.x = game->player.pos.x / s;
 	pp.y = game->player.pos.y / s;
 	if (r.x > 0 && r.y > 0 && r.x < WIDTH && r.y < HEIGHT)
-		draw_line1(game, pp, r);
+		draw_line1(game->map.img, pp, r);
 }
 
-int		distance(t_game *game, t_vector2f hray, t_vector2f vray, float ray_angel)
+int		distance(t_game *game, t_vector2f hray, t_vector2f vray, t_ray *ray)
 {
-	t_vector2f	ray;
 	t_vector2f	d;
-	int			ds;
 	float		fish;
 
-	fish = game->player.rot - ray_angel;
+	fish = game->player.rot - ray->angel;
 	d.x = dst(game->player.pos, hray);
 	d.y = dst(game->player.pos, vray);
 	if (d.x > d.y)
 	{
-		ds = d.y;
-		ray = vray;
+		ray->dst = d.y;
+		ray->ray = vray;
 	}
 	else
 	{
-		ds = d.x;
-		ray = hray;
+		ray->dst = d.x;
+		ray->ray = hray;
 	}
-	ds = ds * cos(fish * DR);
-	draw_rays(game, ray);
-	return (ds);
+	ray->dst = ray->dst * cos(fish * DR);
+	draw_rays(game, ray->ray);
+	return (ray->dst);
 }
 
-void	draw_walls2(t_game *game)
+void	draw_walls(t_game *game)
 {
-	t_vector2f	ray;
-	t_vector2f	step;
+	t_ray		ray;
 	t_vector2f	vray;
 	t_vector2f	hray;
-	float		ray_angel;
 	int			dof;
-	int			ds;
-	int			fov;
 	int			c;
 
 	c = 0;
-	fov = game->fov / 2;
-	ray_angel = circle(game->player.rot - (float) fov);
+	//c = WIDTH / 2;
+	ray.angel_step = (float) game->fov / (WIDTH / game->column_size);
+	ray.angel = circle(game->player.rot - (float) game->fov / 2);
 	while (c < WIDTH)
 	{
 		// horizon
 		dof = 50;
-		if (ray_angel != 180 && ray_angel != 0)
-			horizon_ray(game, &ray, &step, ray_angel);
+		if (ray.angel != 180 && ray.angel != 0)
+			horizon_ray(game, &ray);
 		else
 		{
-			ray.x = game->player.pos.x;
-			ray.y = game->player.pos.y;
+			ray.ray.x = game->player.pos.x;
+			ray.ray.y = game->player.pos.y;
 			dof = 0;
 		}
-		hray = cast_rays(game, dof, ray, step);	
+		hray = cast_rays(game, dof, ray);	
 		// vertical
 		dof = 50;
-		if (ray_angel != 90 && ray_angel != 270)
-			vertical_ray(game, &ray, &step, ray_angel);
+		if (ray.angel != 90 && ray.angel != 270)
+			vertical_ray(game, &ray);
 		else
 		{
-			ray.x = game->player.pos.x;
-			ray.y = game->player.pos.y;
+			ray.ray.x = game->player.pos.x;
+			ray.ray.y = game->player.pos.y;
 			dof = 0;
 		}
-		vray = cast_rays(game, dof, ray, step);
+		vray = cast_rays(game, dof, ray);
 		// distance
-		ds = distance(game, hray, vray, ray_angel);	
-		draw_colum(game, c, ds, 0xAAAA99FF);
-		ray_angel += game->ray_step;
-		ray_angel = circle(ray_angel);
+		ray.dst = distance(game, hray, vray, &ray);	
+		draw_colum(game, c, ray);
+		ray.angel += ray.angel_step;
+		ray.angel = circle(ray.angel);
 		c += game->column_size;
 	}
 	//printf("\n");
@@ -332,9 +413,9 @@ void	draw_map(t_game *game)
 			b.y = (i.y + 1) * t;
 			//draw_cube(game, a, b, 0xedf2f4ff);
 			if (game->map.map[i.x][i.y] == 0)
-				draw_cube(game, a, b, 0x8d99aeff);
+				draw_cube(game->map.img, a, b, 0x8d99aeff);
 			if (game->map.map[i.x][i.y] == 1)
-				draw_cube(game, a, b, 0x2b2d42ff);
+				draw_cube(game->map.img, a, b, 0x2b2d42ff);
 			i.x++;
 		}
 		i.y++;
@@ -347,7 +428,7 @@ void	draw_map(t_game *game)
 	p2.y = game->player.pos.y / scale + sin(game->player.rot * DR) * 5;
 	//p2.c = int2rgb(0xffffffff);
 	//draw_lineDDA(game, p1, p2);
-	draw_line1(game, p1, p2);
+	draw_line1(game->map.img, p1, p2);
 }
 
 void	draw_game(t_game *game)
@@ -360,30 +441,32 @@ void	draw_game(t_game *game)
 	a.y = 0;
 	b.x = WIDTH;
 	b.y = HEIGHT / 2;
-	draw_cube(game, a, b, game->map.col[0]);
+	draw_cube(game->img, a, b, game->map.col[0]);
 	// floor
 	a.x = 0;
 	a.y = HEIGHT / 2;
 	b.x = WIDTH;
 	b.y = HEIGHT;
-	draw_cube(game, a, b, game->map.col[1]);
+	draw_cube(game->img, a, b, game->map.col[1]);
 	// walls
 	draw_map(game);
-	draw_walls2(game);
+	draw_walls(game);
 }
 
 void	render(t_game *game)
 {
 	int	x;
 
-	mlx_delete_image(game->mlx, game->img);	
-	x = -1;
-	while (++x < WIDTH / game->column_size)
-		mlx_delete_image(game->mlx, game->map.tex_img[0][x]);
-	game->img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
+	//mlx_delete_image(game->mlx, game->img);	
+	//x = -1;
+	//while (game->map.tex_img[0][++x] )
+	//	mlx_delete_image(game->mlx, game->map.tex_img[0][x]);
+	//while (++x < WIDTH / game->column_size)
+	////game->img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
 	draw_game(game);
-	if (!game->img || (mlx_image_to_window(game->mlx, game->img, 0, 0) < 0))
-		return ;
+	//mlx_image_to_window(game->mlx, game->map.tex_img[0], 0, 0); 
+	//if (!game->img || (mlx_image_to_window(game->mlx, game->img, 0, 0) < 0))
+	//	return ;
 }
 
 void	hook(void *param)
@@ -467,10 +550,11 @@ int	main(int ac, char **av)
 		read_map(&game, av);
 		game.mlx = mlx_init(WIDTH, HEIGHT, "mossy rocks", true);
 		game.img = mlx_new_image(game.mlx, WIDTH, HEIGHT);
+		game.map.img = mlx_new_image(game.mlx, game.map.size.x * game.tile_size, game.map.size.y * game.tile_size);
 		if (!game.img || mlx_image_to_window(game.mlx, game.img, 0, 0) < 0)
 			return (0);
-		//game.map.tex_img[0] = (mlx_image_t **) malloc((WIDTH / game.column_size + 1)* sizeof(mlx_image_t *));
-		//game.map.tex_img[0] = mlx_texture_to_image(game.mlx, game.map.tex[0]);
+		if (!game.img || mlx_image_to_window(game.mlx, game.map.img, 0, 0) < 0)
+			return (0);
 		//draw_game(&game);
 		mlx_loop_hook(game.mlx, hook, &game);
 		//mlx_key_hook(game.mlx, &movehook, &game);
