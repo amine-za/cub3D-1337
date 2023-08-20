@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yhachami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:07:33 by yhachami          #+#    #+#             */
-/*   Updated: 2023/08/19 01:42:30 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/08/20 12:32:39 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,5 +120,6 @@ int		ft_strlen(const char *s);
 void	draw_lineDDA(mlx_image_t *img, t_vector3color p1, t_vector3color p2);
 t_rgb	int2rgb(long long int mono);
 int		rgb2int(t_rgb c);
+void	*ft_ft_memmove(void *dst, void *src, size_t len);
 
 #endif

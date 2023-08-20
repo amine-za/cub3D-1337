@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
+/*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:05:54 by yhachami          #+#    #+#             */
-/*   Updated: 2023/08/20 08:15:47 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/08/20 12:34:28 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ void	read_map(t_game *game, char **av)
 	int		y;
 	int		z;
 
-	game->fov = 100;
-	game->column_size = 5;
+	game->fov = 60;
+	game->column_size = 1;
 	//game->column_size = WIDTH / game->fov;
 	game->tile_size = 50;
 	// tex
@@ -187,7 +187,7 @@ bool draw_texture(t_game *game, uint32_t h2, t_vector2i a, t_vector2i b, t_ray r
 			ry = (float) z * r;
 			pixelx = &texture->pixels[(((((int) ry) * texture->width) + (a.x + (int) rx))) * texture->bytes_per_pixel];
 			pixeli = &image->pixels[((a.y + i) * image->width + (a.x + j)) * texture->bytes_per_pixel];
-			memmove(pixeli, pixelx, texture->bytes_per_pixel);
+			ft_memmove(pixeli, pixelx, texture->bytes_per_pixel);
 			i++;
 			z++;
 			if (ry > texture->height)
@@ -265,7 +265,7 @@ bool draw_texture2(t_game *game, uint32_t h2, t_vector2i a, t_ray ray)
 				ry = (float) z * r;
 			pixelx = &tex->pixels[((((int) ry) * tex->width) + ((int) rx)) * tex->bytes_per_pixel];
 			pixeli = &game->img->pixels[((a.y + i) * game->img->width + (a.x + j)) * tex->bytes_per_pixel];
-			memmove(pixeli, pixelx, tex->bytes_per_pixel);
+			ft_memmove(pixeli, pixelx, tex->bytes_per_pixel);
 			i++;
 			z++;
 			if (ry > tex->height)
