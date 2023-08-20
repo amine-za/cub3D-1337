@@ -6,7 +6,7 @@
 /*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:05:54 by yhachami          #+#    #+#             */
-/*   Updated: 2023/08/19 01:55:03 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/08/20 08:15:47 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,12 @@ void	read_map(t_game *game, char **av)
 	game->fov = 100;
 	game->column_size = 5;
 	//game->column_size = WIDTH / game->fov;
-	//game->ray_step = 1;
 	game->tile_size = 50;
 	// tex
-	game->map.tex[0] = mlx_load_png("./tex.png");
+	game->map.tex[0] = mlx_load_png("./vega.png");
+	game->map.tex[1] = mlx_load_png("./tex2.png");
+	game->map.tex[2] = mlx_load_png("./tex3.png");
+	game->map.tex[3] = mlx_load_png("./tex4.png");
 	// sky and floor color
 	game->map.col[0] = 0x2E1A47FF;
 	game->map.col[1] = 0x1E3226FF;
@@ -130,55 +132,147 @@ void	draw_cube(mlx_image_t *img, t_vector2i start, t_vector2i end, int color)
 	}
 }
 
-bool draw_texture(t_game *game, uint32_t xy[2], uint32_t wh[2], t_vector2i a, t_vector2i b, t_ray ray)
+void	draw_rays(t_game *game, t_vector2f ray)
+{
+	int			s;
+	t_vector2f	pp;
+	t_vector2f	r;
+
+	s = 5;
+	r.x = ray.x / s;
+	r.y = ray.y / s;
+	pp.x = game->player.pos.x / s;
+	pp.y = game->player.pos.y / s;
+	if (r.x > 0 && r.y > 0 && r.x < WIDTH && r.y < HEIGHT)
+		draw_line1(game->map.img, pp, r);
+}
+
+bool draw_texture(t_game *game, uint32_t h2, t_vector2i a, t_vector2i b, t_ray ray)
 {
 	mlx_image_t* image;
 	mlx_texture_t* texture;
-	uint32_t xx;
-	uint32_t yy;
 	uint8_t* pixelx;
 	uint8_t* pixeli;
 	uint32_t i;
 	uint32_t j;
 	uint32_t z;
+	uint32_t z2;
 	float	r;
-	float	rr;
+	float	r2;
+	float	rx;
+	float	ry;
 	int		h;
 
 	image = game->img;
 	texture = game->map.tex[0];
-	xx = a.x;
-	yy = a.y;
-	while (xy[0] > texture->width)
-		xy[0] -= texture->width;
+	//printf("xy = %d, %d\n", xy[0], xy[1]);
 
 	//h = ray.dst;	
 	h = (game->tile_size * HEIGHT) / ray.dst;
-
 	r = (float) texture->height / h;
-
-	//printf("r = %f, h = %d\n", r, h);
-	//printf("a = %d, %d\n", a.x, a.y);
-	//printf("b = %d, %d\n", b.x, b.y);
-	//j = 0;
-	//while (j < b.y)
-	//{
+	r2 = (float) texture->width / h;
+	//printf("r = %f, r2 = %f, h = %d\n", r, r2, h);
+	
+	j = 0;
+	z2 = 0;
+	while (j < game->column_size)
+	{
+		//rx = (float) z2 * r2;
+		rx = 0;
 		i = 0;
 		z = 0;
-		while (i < wh[1])
+		while (i < h2)
 		{
-			//rr = (float) z / r;
-			rr = (float) z * r;
-			pixelx = &texture->pixels[((((xy[1] + (int) rr) * texture->width) + (xy[0] ))) * texture->bytes_per_pixel];
-			pixeli = &image->pixels[((yy + i) * image->width + xx) * texture->bytes_per_pixel];
-			memmove(pixeli, pixelx, wh[0] * texture->bytes_per_pixel);
+			//ry = (float) z / r;
+			ry = (float) z * r;
+			pixelx = &texture->pixels[(((((int) ry) * texture->width) + (a.x + (int) rx))) * texture->bytes_per_pixel];
+			pixeli = &image->pixels[((a.y + i) * image->width + (a.x + j)) * texture->bytes_per_pixel];
+			memmove(pixeli, pixelx, texture->bytes_per_pixel);
 			i++;
 			z++;
-			if (rr > texture->height)
+			if (ry > texture->height)
 				z = 0;
 		}
-	//	j++;
-	//}
+		j++;
+		//z2++;	
+		//if (rx > texture->width)
+		//	z2 = 0;
+	}
+	return (true);
+}
+
+bool draw_texture2(t_game *game, uint32_t h2, t_vector2i a, t_ray ray)
+{
+	mlx_texture_t*	tex;
+	uint8_t*		pixelx;
+	uint8_t*		pixeli;
+	uint32_t		i;
+	uint32_t		j;
+	uint32_t		z;
+	float			r;
+	float			r2;
+	float			rx;
+	float			ry;
+	int				h;
+	int				px;
+	int				py;
+	int				x;
+	int				y;
+
+	//h = (ray.dst / 2) + 200;
+	//h = ray.dst;
+	h = (game->tile_size * HEIGHT) / ray.dst;
+	px = ray.ray.x - (ray.tile.x * game->tile_size);
+	py = ray.ray.y - (ray.tile.y * game->tile_size);
+	if (py == 0)
+	{
+		tex = game->map.tex[0];
+		x = px;
+	}
+	else if (py == 49)
+	{
+		tex = game->map.tex[1];
+		x = px;
+	}
+	else if (px == 0)
+	{
+		tex = game->map.tex[2];
+		x = py;
+	}
+	else if (px == 49)
+	{
+		tex = game->map.tex[3];
+		x = py;
+	}
+	y = 0;
+	if (h > HEIGHT)
+		y = (HEIGHT - h) / 2;
+
+	r = (float) tex->height / h;
+	r2 = (float) tex->width / game->tile_size;
+	//printf("r = %f, r2 = %f, h = %d\n", r, r2, h);
+
+	j = 0;
+	while (j < game->column_size)
+	{
+		rx = (float) x * r2;
+		i = 0;
+		z = 0;
+		while (i < h2)
+		{
+			ry = (float) (z - y) * r;
+			if (ry > tex->height)
+				ry = (float) z * r;
+			pixelx = &tex->pixels[((((int) ry) * tex->width) + ((int) rx)) * tex->bytes_per_pixel];
+			pixeli = &game->img->pixels[((a.y + i) * game->img->width + (a.x + j)) * tex->bytes_per_pixel];
+			memmove(pixeli, pixelx, tex->bytes_per_pixel);
+			i++;
+			z++;
+			if (ry > tex->height)
+				z = 0;
+		}
+		j++;
+	}
 	return (true);
 }
 
@@ -190,38 +284,69 @@ int	draw_colum(t_game *game, int x, t_ray ray)
 	int		s;
 	int		h;
 	int		o;
-	unsigned int	xy[2];
-	unsigned int	wh[2];
+	int		h2;
 
 	// column
 	s = game->tile_size;
 	c = game->column_size;
-	//h = ray.dst;
+	h = (ray.dst / 2) + (5000 / ray.dst);
+	if (h > HEIGHT)
+		h = HEIGHT;
+	a.x = x;
+	a.y = h ;
+	b.x = x + c;
+	b.y = HEIGHT - h;
+	h2 = b.y - h;
+	if (b.y <= a.y)
+		b.y = a.y + 1;
+	if (h2 <= 1)
+		h2 = 1;	
+	//printf("h = %f, h2 = %d\n", h, h2);
+	//printf("a = %d, %d\n", a.x, a.y);
+	//printf("b = %d, %d\n", b.x, b.y);
+
+	if (a.x > 1 && a.x < WIDTH - 1 && a.y > 1 && a.y < HEIGHT - 1
+			&& b.x > 1 && b.x < WIDTH - 1 && b.y > 1 && b.y < HEIGHT - 1)
+	{	
+		//draw_cube(game->img, a, b, 0xCCBBAA);
+		//draw_texture(game, h2, a, b, ray);
+		draw_texture2(game, h2, a, ray);
+	}
+	return (0);
+}
+
+int	draw_colum2(t_game *game, int x, t_ray ray)
+{
+	t_vector2i	a;
+	t_vector2i	b;
+	int		c;
+	int		s;
+	int		h;
+	int		o;
+	int		h2;
+
+	// column
+	s = game->tile_size;
+	c = game->column_size;
 	h = (game->tile_size * HEIGHT) /ray.dst;
 	if (h > HEIGHT)
 		h = HEIGHT;
 	a.x = x;
 	a.y = (HEIGHT / 2) - (h / 2);
-	//a.y = h / 2;
-
 	b.x = x + c;
 	b.y = (HEIGHT / 2) + (h / 2);
-	//b.y = HEIGHT - (h / 2) + 1;
+	h2 = h;
 
 	if (a.y < 5)
 		a.y = 5;
 	if (b.y > HEIGHT - 5)
 		b.y = HEIGHT - 5;
-	xy[0] = a.x;
-	xy[1] = 0;
-	wh[0] = 1;
-	wh[1] = h;
-	//wh[1] = b.y - h;
 	if (a.x > 0 && a.x < WIDTH && a.y > 0 && a.y < HEIGHT
 			&& b.x > 0 && b.x < WIDTH && b.y > 0 && b.y < HEIGHT)
 	{	
-		draw_cube(game->img, a, b, 0xCCBBAA);
-		draw_texture(game, xy, wh, a, b, ray);
+		//draw_cube(game->img, a, b, 0xCCBBAA);
+		//draw_texture(game, wh, a, b, ray);
+		draw_texture2(game, h2, a, ray);
 	}
 	return (0);
 }
@@ -276,7 +401,7 @@ void	vertical_ray(t_game *game, t_ray *ray)
 	}
 }
 
-t_vector2f	cast_rays(t_game *game, int dof, t_ray ray)
+t_vector2f	cast_rays(t_game *game, int dof, t_ray *ray)
 {
 	t_vector2f	outray;
 	t_vector2i	tile;
@@ -286,37 +411,22 @@ t_vector2f	cast_rays(t_game *game, int dof, t_ray ray)
 	//outray = ray;
 	while (dof > 0)
 	{
-		ray.tile.x = ray.ray.x / ts;
-		ray.tile.y = ray.ray.y / ts;
-		if (ray.tile.x >= 0 && ray.tile.y >= 0 && ray.tile.x < 50 && ray.tile.y < 50
-				&& game->map.map[ray.tile.x][ray.tile.y] == 1)
+		ray->tile.x = ray->ray.x / ts;
+		ray->tile.y = ray->ray.y / ts;
+		if (ray->tile.x >= 0 && ray->tile.y >= 0 && ray->tile.x < 50 && ray->tile.y < 50
+				&& game->map.map[ray->tile.x][ray->tile.y] == 1)
 		{
 			dof = 0;
-			outray = ray.ray;
+			outray = ray->ray;
 		}
 		else
 		{
 			dof--;
-			ray.ray.x += ray.step.x;
-			ray.ray.y += ray.step.y;
+			ray->ray.x += ray->step.x;
+			ray->ray.y += ray->step.y;
 		}
 	}
 	return (outray);
-}
-
-void	draw_rays(t_game *game, t_vector2f ray)
-{
-	int			s;
-	t_vector2f	pp;
-	t_vector2f	r;
-
-	s = 5;
-	r.x = ray.x / s;
-	r.y = ray.y / s;
-	pp.x = game->player.pos.x / s;
-	pp.y = game->player.pos.y / s;
-	if (r.x > 0 && r.y > 0 && r.x < WIDTH && r.y < HEIGHT)
-		draw_line1(game->map.img, pp, r);
 }
 
 int		distance(t_game *game, t_vector2f hray, t_vector2f vray, t_ray *ray)
@@ -337,6 +447,8 @@ int		distance(t_game *game, t_vector2f hray, t_vector2f vray, t_ray *ray)
 		ray->dst = d.x;
 		ray->ray = hray;
 	}
+	ray->tile.x = ray->ray.x / game->tile_size;
+	ray->tile.y = ray->ray.y / game->tile_size;
 	ray->dst = ray->dst * cos(fish * DR);
 	draw_rays(game, ray->ray);
 	return (ray->dst);
@@ -355,6 +467,7 @@ void	draw_walls(t_game *game)
 	ray.angel_step = (float) game->fov / (WIDTH / game->column_size);
 	ray.angel = circle(game->player.rot - (float) game->fov / 2);
 	while (c < WIDTH)
+	//while (c <= WIDTH / 2)
 	{
 		// horizon
 		dof = 50;
@@ -366,7 +479,7 @@ void	draw_walls(t_game *game)
 			ray.ray.y = game->player.pos.y;
 			dof = 0;
 		}
-		hray = cast_rays(game, dof, ray);	
+		hray = cast_rays(game, dof, &ray);	
 		// vertical
 		dof = 50;
 		if (ray.angel != 90 && ray.angel != 270)
@@ -377,12 +490,11 @@ void	draw_walls(t_game *game)
 			ray.ray.y = game->player.pos.y;
 			dof = 0;
 		}
-		vray = cast_rays(game, dof, ray);
+		vray = cast_rays(game, dof, &ray);
 		// distance
-		ray.dst = distance(game, hray, vray, &ray);	
-		draw_colum(game, c, ray);
-		ray.angel += ray.angel_step;
-		ray.angel = circle(ray.angel);
+		distance(game, hray, vray, &ray);
+		draw_colum2(game, c, ray);
+		ray.angel = circle(ray.angel + ray.angel_step);
 		c += game->column_size;
 	}
 	//printf("\n");
@@ -448,8 +560,9 @@ void	draw_game(t_game *game)
 	b.x = WIDTH;
 	b.y = HEIGHT;
 	draw_cube(game->img, a, b, game->map.col[1]);
-	// walls
+	// map
 	draw_map(game);
+	// walls
 	draw_walls(game);
 }
 
@@ -482,11 +595,11 @@ void	hook(void *param)
 	render(game);
 	game->player.rot = circle(game->player.rot);
 	if (mlx_is_key_down(game->mlx, MLX_KEY_D))
-		game->player.rot += 1;
+		game->player.rot += 3;
 	if (mlx_is_key_down(game->mlx, MLX_KEY_A))
-		game->player.rot -= 1;
-	speed = 2;
-	margin = 10;
+		game->player.rot -= 3;
+	speed = 3;
+	margin = 5;
 	pdx = cos(game->player.rot * DR) * speed;
 	pdy = sin(game->player.rot * DR) * speed;
 	if (mlx_is_key_down(game->mlx, MLX_KEY_W))
