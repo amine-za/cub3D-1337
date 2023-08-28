@@ -9,8 +9,10 @@ HEADERS = cub3d.h
 SRC = cub3d.c draw_line.c color.c
 #SRC_B = fdf_bonus.c bonus/draw_line_bonus.c bonus/read_grid_bonus.c bonus/draw_grid_bonus.c bonus/color_bonus.c\
 #		bonus/interface.c bonus/control.c bonus/control2.c
-UTL =	utils/get_next_line.c utils/get_next_line_utils.c utils/ft_itoa.c utils/ft_atoi.c utils/ft_strlen.c \
-		utils/ft_memmove.c
+UTL =	utils/get_next_line.c utils/get_next_line_utils.c utils/ft_itoa.c utils/ft_atoi.c \
+		utils/ft_memmove.c pars_map.c pars_clrs.c utils/ft_strdup.c \
+		utils/ft_bezero.c utils/ft_strncmp.c\
+		new_begining.c new_raycasting.c
 
 OBJ = ${SRC:.c=.o}
 #OBJ_B = ${SRC_B:.c=.o}
@@ -34,11 +36,15 @@ $(NAME): $(OBJ) $(UTILS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ) $(OBJ_B) $(UTILS) 
+	@rm -f $(OBJ) $(OBJ_B) $(UTILS) 
 
 fclean: clean 
-	rm -f $(NAME) $(BONUS)
+	@rm -f $(NAME) $(BONUS)
 
 re: fclean all
 
 .PHONY: all clean re
+
+my: re 
+	@rm -f $(OBJ) $(OBJ_B) $(UTILS) 
+	clear

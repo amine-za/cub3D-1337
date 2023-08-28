@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:07:33 by yhachami          #+#    #+#             */
-/*   Updated: 2023/08/20 12:32:39 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/08/27 00:38:19 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@
 # include <unistd.h>
 # include <limits.h>
 # include "MLX42/include/MLX42/MLX42.h"
-
+# include "utils/get_next_line.h"
 # include <string.h>
 # define BPP sizeof(int32_t)
 
-# define WIDTH 1920
-# define HEIGHT 1080
+# define WIDTH 1280
+# define HEIGHT 720
 # define DEFAULT_COLOR "0xFFFFFFFF"
 # define PI 3.14159265359
 # define P2 1.57079632679
@@ -80,8 +80,8 @@ typedef struct s_plot {
 typedef struct	s_map {
 	mlx_image_t		*img;
 	t_vector2i		size;
-	int				**map;
-	int				col[2];
+	char			**map;
+	unsigned int	col[2];
 	mlx_texture_t	*tex[4];
 	mlx_image_t		*tex_img[4];
 }		t_map;
@@ -90,6 +90,17 @@ typedef	struct	s_player {
 	t_vector2f	pos;
 	float		rot;
 }		t_player;
+
+typedef	struct	s_ray2 {
+	//float		x;
+	//float		y;
+	t_vector2f	ray;
+	t_vector2f	step;
+	t_vector2i	tile;
+	float		angel_step;
+	float		dst;
+	float		angel;
+}		t_ray2;
 
 typedef	struct	s_ray {
 	//float		x;
@@ -100,7 +111,9 @@ typedef	struct	s_ray {
 	float		angel_step;
 	float		dst;
 	float		angel;
+	int			count;
 }		t_ray;
+
 
 typedef struct s_game {
 	t_map			map;
@@ -116,10 +129,28 @@ typedef struct s_game {
 char	*get_next_line(int fd);
 char	*ft_itoa(int n);
 int		ft_atoi(char *str);
-int		ft_strlen(const char *s);
 void	draw_lineDDA(mlx_image_t *img, t_vector3color p1, t_vector3color p2);
 t_rgb	int2rgb(long long int mono);
 int		rgb2int(t_rgb c);
-void	*ft_ft_memmove(void *dst, void *src, size_t len);
+void	*ft_memmove(void *dst, void *src, size_t len);
+int		parsing_main(t_game *game, char *map);
+int 	map_check(int fd, t_game *game);
+char	*ft_strdup( char *s1);
+void    ft_bzero(void *s, size_t n);
+void	free_arr(char **ar);
+int		rgb2int(t_rgb c);
+int     ft_strncmp( char *s1, char *s2, size_t n);
+
+
+void	draw_55ttt(t_game *game, t_vector2f start, t_vector2f end, int clr);
+void	draw_morabe3(t_game *game, t_vector2i start, t_vector2i end, int clr);
+void	draw_dowara(t_game *game, t_vector2i center, int r, int clr);
+
+
+
+void 	hooploop(void *param);
+void	draw_map(t_game *game);
+void	rycasting(t_game *game);
+// int     ft_isdigit(int c);
 
 #endif
