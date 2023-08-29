@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 23:42:42 by azaghlou          #+#    #+#             */
-/*   Updated: 2023/08/23 13:17:58 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/08/29 19:17:17 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	check_around_a_char(char **map, int j, int i, char c)
 	return (0);
 }
 
-//i call this function to check the first and the last line
+//i call this function to check the first and the last line 
 int	check_line(char *line)
 {
 	int	i;
