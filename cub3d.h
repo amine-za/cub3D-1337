@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:07:33 by yhachami          #+#    #+#             */
-/*   Updated: 2023/08/27 00:38:19 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/08/29 21:08:08 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_v3c {
         t_rgb   c;
 }       t_vector3color;
 
+
 typedef struct s_v3i {
         int   x;
         int   y;
@@ -80,6 +81,7 @@ typedef struct s_plot {
 typedef struct	s_map {
 	mlx_image_t		*img;
 	t_vector2i		size;
+	float			scale;
 	char			**map;
 	unsigned int	col[2];
 	mlx_texture_t	*tex[4];
@@ -91,20 +93,7 @@ typedef	struct	s_player {
 	float		rot;
 }		t_player;
 
-typedef	struct	s_ray2 {
-	//float		x;
-	//float		y;
-	t_vector2f	ray;
-	t_vector2f	step;
-	t_vector2i	tile;
-	float		angel_step;
-	float		dst;
-	float		angel;
-}		t_ray2;
-
 typedef	struct	s_ray {
-	//float		x;
-	//float		y;
 	t_vector2f	ray;
 	t_vector2f	step;
 	t_vector2i	tile;
@@ -113,7 +102,6 @@ typedef	struct	s_ray {
 	float		angel;
 	int			count;
 }		t_ray;
-
 
 typedef struct s_game {
 	t_map			map;
@@ -141,14 +129,22 @@ void	free_arr(char **ar);
 int		rgb2int(t_rgb c);
 int     ft_strncmp( char *s1, char *s2, size_t n);
 
+float	circle(float fish);
+float	dst(t_vector2f a, t_vector2f b);
 
 void	draw_55ttt(t_game *game, t_vector2f start, t_vector2f end, int clr);
 void	draw_morabe3(t_game *game, t_vector2i start, t_vector2i end, int clr);
 void	draw_dowara(t_game *game, t_vector2i center, int r, int clr);
 
+void	draw_walls(t_game *game);
+void	draw_circle(t_game *game, t_vector2i center, int r, int clr);
+void	draw_rays(t_game *game, t_vector2f ray);
+void	draw_cube(mlx_image_t *img, t_vector2i start, t_vector2i end, int color);
+void    draw_line(mlx_image_t *img, t_vector2f p0, t_vector2f p1, int clr);
+void 	draw_texture(t_game *game, uint32_t h2, t_vector2i a, t_ray ray);
+void	draw_game(t_game *game);
 
-
-void 	hooploop(void *param);
+void 	hookloop(void *param);
 void	draw_map(t_game *game);
 void	rycasting(t_game *game);
 // int     ft_isdigit(int c);

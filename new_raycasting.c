@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 19:54:31 by azaghlou          #+#    #+#             */
-/*   Updated: 2023/08/27 01:56:49 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/08/29 21:05:50 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	draw_7iit(int x, float ray_lenght, t_game *game)
 
 	column = WIDTH / 60;
 	start.x = x * column;
-	printf("h %f\n", ray_lenght);
+	// printf("h %f\n", ray_lenght);
 	h = (HEIGHT * 20) / ray_lenght;
 	start.y = (HEIGHT/2) - h;
 	// start.y = x * column;
@@ -108,7 +108,7 @@ void	draw_7iit(int x, float ray_lenght, t_game *game)
 		start.y = 0;
 	if (end.y > HEIGHT)
 		end.y = HEIGHT;
-	draw_morabe3(game, start, end, 0x777777ff);
+	draw_cube(game->img, start, end, 0x777777ff);
 }
 
 void	rycasting(t_game *game)
@@ -136,9 +136,9 @@ void	rycasting(t_game *game)
 		horizontal_distance = pythagoras_fct(ray.ray.x - p.x, ray.ray.y - p.y);
 	
 		if (vertical_distance > horizontal_distance)
-			draw_55ttt(game, p, horizontal_ray, 0x11AA00ff);
+			draw_line(game->img, p, horizontal_ray, 0x11AA00ff);
 		else
-			draw_55ttt(game, p, vertical_ray, 0xAA0000ff);
+			draw_line(game->img, p, vertical_ray, 0xAA0000ff);
 		
 		if (vertical_distance > horizontal_distance)
 			distance = horizontal_distance;
