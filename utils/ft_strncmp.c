@@ -1,21 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/02 17:03:03 by yhachami          #+#    #+#             */
-/*   Updated: 2023/08/23 10:55:16 by azaghlou         ###   ########.fr       */
+/*   Created: 2023/08/26 18:45:25 by azaghlou          #+#    #+#             */
+/*   Updated: 2023/08/26 18:46:16 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_strrlen( char *s)
-{
-	int	l;
+#include "../cub3d.h"
 
-	l = 0;
-	while (s[l])
-		l++;
-	return (l);
+int     ft_strncmp( char *s1, char *s2, size_t n)
+{
+	size_t  i;
+
+	i = 0;
+	while (i < n && (s1[i] != '\0' || s2[i] != '\0'))
+	{
+			if ((unsigned char)s1[i] != (unsigned char)s2[i])
+			{
+					return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+			}
+			i++;
+	}
+	return (0);
 }

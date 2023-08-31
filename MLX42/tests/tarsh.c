@@ -94,5 +94,6 @@ t_rgb	get_color(char *s)
 
 int	rgb2int(t_rgb c)
 {
+	printf("--> %d %d %d %d<--\n", c.r, c.g, c.b, c.a);
 	return (c.r * 16777216 + c.g * 65536 + c.b * 256 + c.a);
 }

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
+/*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 23:25:38 by yhachami          #+#    #+#             */
-/*   Updated: 2023/07/24 20:08:59 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/08/31 05:15:13 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"cub3d.h"
+#include "cub3d.h"
 
 int	find_end(char *s)
 {

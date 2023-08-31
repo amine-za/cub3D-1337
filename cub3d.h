@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yhachami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:07:33 by yhachami          #+#    #+#             */
-/*   Updated: 2023/08/19 01:42:30 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/08/31 05:06:52 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <unistd.h>
 # include <limits.h>
 # include "MLX42/include/MLX42/MLX42.h"
-
+# include "utils/get_next_line.h"
 # include <string.h>
 # define BPP sizeof(int32_t)
 
@@ -80,45 +80,82 @@ typedef struct s_plot {
 typedef struct	s_map {
 	mlx_image_t		*img;
 	t_vector2i		size;
-	int				**map;
-	int				col[2];
+	float			scale;
+	char			**map;
+	unsigned int	col[2];
 	mlx_texture_t	*tex[4];
 	mlx_image_t		*tex_img[4];
 }		t_map;
 
 typedef	struct	s_player {
-	t_vector2f	pos;
-	float		rot;
+	t_vector2f		pos;
+	t_vector2f		img_pos;
+	t_vector2f		img_mult;
+	float			rot;
+	mlx_texture_t	*tex;
+	mlx_image_t 	*img;
 }		t_player;
 
 typedef	struct	s_ray {
-	//float		x;
-	//float		y;
 	t_vector2f	ray;
 	t_vector2f	step;
 	t_vector2i	tile;
+	t_vector2f	pos_in_tile;
 	float		angel_step;
 	float		dst;
+	float		wall_height;
 	float		angel;
+	int			dof;
 }		t_ray;
 
 typedef struct s_game {
 	t_map			map;
 	t_player		player;
+	t_vector2i		window;
 	int				tile_size;
 	int				column_size;
 	int				fov;
-	mlx_t			*mlx;
+	mlx_texture_t	*tex;
 	mlx_image_t		*img;
-	mlx_image_t		*ui[30];
+	mlx_image_t		*ui;
+	mlx_t			*mlx;
 }               t_game;
 
 char	*get_next_line(int fd);
 char	*ft_itoa(int n);
 int		ft_atoi(char *str);
-int		ft_strlen(const char *s);
 void	draw_lineDDA(mlx_image_t *img, t_vector3color p1, t_vector3color p2);
 t_rgb	int2rgb(long long int mono);
 int		rgb2int(t_rgb c);
+void	*ft_memmove(void *dst, void *src, size_t len);
+int		parsing_main(t_game *game, char *map);
+int 	map_check(int fd, t_game *game);
+char	*ft_strdup( char *s1);
+void    ft_bzero(void *s, size_t n);
+void	free_arr(char **ar);
+int		rgb2int(t_rgb c);
+int     ft_strncmp( char *s1, char *s2, size_t n);
+
+float	circle(float fish);
+float	pythagoras(float a, float b);
+
+void	move_up(t_game *game, t_vector2f pd);
+void	move_down(t_game *game, t_vector2f pd);
+void	move_right(t_game *game, t_vector2f pd);
+void	move_left(t_game *game, t_vector2f pd);
+
+void	draw_circle(t_game *game, t_vector2i center, int r, int clr);
+void	draw_rays(t_game *game, t_vector2f ray);
+void	draw_cube(mlx_image_t *img, t_vector2i start, t_vector2i end, int color);
+void    draw_line(mlx_image_t *img, t_vector2f p0, t_vector2f p1, int clr);
+void	draw_texture(t_game *game, t_ray ray, t_vector2i a);
+void	player_to_image(t_game *game, t_vector2i img_pos, float sx, float sy);
+void	draw_player(t_game *game);
+void	draw_colum(t_game *game, int x, t_ray ray);
+void	draw_walls(t_game *game);
+void	draw_game(t_game *game);
+void	draw_map(t_game *game);
+void	rycasting(t_game *game);
+// int     ft_isdigit(int c);
 
 #endif
