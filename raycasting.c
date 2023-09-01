@@ -6,7 +6,7 @@
 /*   By: yhachami <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 23:02:02 by yhachami          #+#    #+#             */
-/*   Updated: 2023/08/31 00:11:47 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/08/31 06:49:36 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,6 @@ t_vector2f	cast_rays(t_game *game, t_ray *ray)
 	return (outray);
 }
 
-//d.x = dst(game->player.pos, hray);
-//d.y = dst(game->player.pos, vray);
 int	distance(t_game *game, t_vector2f hray, t_vector2f vray, t_ray *ray)
 {
 	t_vector2f	d;

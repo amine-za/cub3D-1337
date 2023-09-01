@@ -6,7 +6,7 @@ LIBS = MLX42/libmlx42.a MLX42/libglfw3.a -Iinclude -pthread -lm -framework Cocoa
 #-Iinclude -ldl -lglfw -pthread -lm
 
 HEADERS = cub3d.h
-SRC = cub3d.c draw_line.c color.c\
+SRC = cub3d.c color.c\
 		pars_map.c pars_clrs.c\
 		control.c draw_things.c draw_texture.c\
 		raycasting.c utils.c\

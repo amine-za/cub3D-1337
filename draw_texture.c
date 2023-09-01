@@ -6,7 +6,7 @@
 /*   By: yhachami <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 23:28:17 by yhachami          #+#    #+#             */
-/*   Updated: 2023/08/31 05:14:48 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/09/01 16:08:36 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	texture_to_image(t_game *game, t_ray ray, t_vector2i a, t_vector2f wall)
 	i = 0;
 	while (i < ray.wall_height && i < HEIGHT)
 	{
-		r.y = (float)(i - wall.y) *(tex->height / ray.wall_height);
+		r.y = (float)(i - wall.y) * (tex->height / ray.wall_height);
 		if ((((int) r.y * tex->width) + (int) r.x) < (tex->width * tex->height))
 		{
 			pixelx = &tex->pixels[((((int) r.y) * tex->width)
