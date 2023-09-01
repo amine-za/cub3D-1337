@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:07:33 by yhachami          #+#    #+#             */
-/*   Updated: 2023/08/31 05:06:52 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/09/01 16:49:16 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,17 @@ void	draw_walls(t_game *game);
 void	draw_game(t_game *game);
 void	draw_map(t_game *game);
 void	rycasting(t_game *game);
-// int     ft_isdigit(int c);
+int		space_tabe(char c);
+int     ft_isdigit(int c);
+int		rgb_check(char *rgb);
+int		space_tabe(char c);
+int		finished_that_check(int *result);
+void	fill_int_arry_with_zero(int *result);
+int		colors(char *line, int indx, int *result, t_game *game);
+void	free_arr(char **ar);
+int		tallest_line_length(char **map);
+char	**arrjoin(char **ar, char *line, int size);
+int		check_line(char *line);
+void	calloc_the_array(char ***ar, char *rgb, char **pntr);
 
 #endif
