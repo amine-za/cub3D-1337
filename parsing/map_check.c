@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 23:42:42 by azaghlou          #+#    #+#             */
-/*   Updated: 2023/09/01 16:47:52 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/01 19:06:45 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,8 @@ int	loop_on_map(char **map, t_game *game, int j, int *x)
 		{
 			if (check_around_a_char(map, j, i, map[j][i]))
 				return (1);
-			game->player.pos.x = i * game->tile_size;
-			game->player.pos.y = j * game->tile_size;
+			game->player.pos.x = (i * game->tile_size) + 1;
+			game->player.pos.y = (j * game->tile_size) + 1;
 			game->player.rot = (float)rotation_of_player(map[j][i]);
 			map[j][i] = '0';
 			x[0]++;
