@@ -1,21 +1,21 @@
 NAME = cub3d
-#CC = gcc
-#CFLAGS	:= -Wall -Wextra -Werror
+BONUS = cub3d_bonus
 
-LIBS = MLX42/libmlx42.a MLX42/libglfw3.a -Iinclude -pthread -lm -framework Cocoa -framework OpenGL -framework IOKit
-#-Iinclude -ldl -lglfw -pthread -lm
+CC = gcc
+CFLAGS	:= -Wall -Wextra -Werror
+
+LIBS = MLX42/libmlx42.a MLX42/libglfw3.a -Iinclude -framework Cocoa -framework OpenGL -framework IOKit
 
 HEADERS = cub3d.h
+
 SRC = cub3d.c  color.c control.c draw_things.c draw_texture.c raycasting.c utils.c \
 		parsing/parsing_Main.c parsing/colors_check.c parsing/map_check.c \
 		parsing/basic_functions1.c parsing/basic_functions2.c
-		# chyata.c
-#SRC_B = 
+
 UTL =	utils/get_next_line.c utils/get_next_line_utils.c utils/ft_itoa.c utils/ft_atoi.c\
 		utils/ft_memmove.c utils/ft_strdup.c utils/ft_bezero.c utils/ft_strncmp.c utils/ft_isdigit.c
 
 OBJ = ${SRC:.c=.o}
-#OBJ_B = ${SRC_B:.c=.o}
 UTILS = ${UTL:.c=.o}
 
 G = " MOSSY ROCKS "
@@ -25,6 +25,9 @@ all: $(NAME)
 
 $(NAME): $(OBJ) $(UTILS)
 	$(CC) $(OBJ) $(UTILS) $(LIBS) -o $(NAME)
+
+$(BONUS): $(OBJ) $(UTILS)
+	$(CC) $(OBJ) $(UTILS) $(LIBS) -o $(BONUS)
 
 %.o : %.c $(HEADERS)
 	$(CC) $(CFLAGS) -c $< -o $@
