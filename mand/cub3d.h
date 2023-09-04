@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:07:33 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/04 18:08:57 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/04 18:39:14 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ int		rgb_check(char *rgb);
 int		space_tabe(char c);
 int		finished_that_check(int *result, char *line);
 void	fill_int_arry_with_zero(int *result);
-int		colors(char *line, int indx, int *result, t_game *game);
+int		clrs(char *line, int indx, int *result, t_game *game);
 void	free_arr(char **ar);
 int		tallest_line_length(char **map);
 char	**arrjoin(char **ar, char *line, int size);

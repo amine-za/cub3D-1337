@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 16:14:00 by azaghlou          #+#    #+#             */
-/*   Updated: 2023/09/04 18:04:03 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/04 18:39:29 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int	rgb_check(char *rgb)
 }
 
 // Function that checks if the rgb lines are written in a good way
-int	colors(char *line, int indx, int *result, t_game *game)
+int	clrs(char *line, int indx, int *result, t_game *game)
 {
 	if (line[indx] && line[indx] == 'F')
 	{

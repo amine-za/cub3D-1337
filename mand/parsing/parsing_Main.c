@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 23:42:02 by azaghlou          #+#    #+#             */
-/*   Updated: 2023/09/04 18:13:57 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/04 18:40:11 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	calloc_the_array(char ***ar, char *rgb, char **pntr)
 }
 
 // Function that checks if the textures lines are written in a good way
-int	directions(char *line, int indx, int *result, t_game *game)
+int	drction(char *line, int indx, int *result, t_game *game)
 {
 	if (exist_char(line, indx) && line[indx] == 'N' && line[indx + 1] == 'O')
 	{
@@ -91,7 +91,7 @@ int	clrs_and_textures_check(int fd, t_game *game)
 		line = get_next_line(fd);
 		while (line && line[indx] && (line[indx] == ' ' || line[indx] == '\t'))
 			indx++;
-		if (directions(line, indx, result, game) && colors(line, indx, result, game))
+		if (drction(line, indx, result, game) && clrs(line, indx, result, game))
 			return (free(line), 2);
 	}
 	if (!finished_that_check(result, line))
