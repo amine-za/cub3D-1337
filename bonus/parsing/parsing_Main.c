@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_Main.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 23:42:02 by azaghlou          #+#    #+#             */
-/*   Updated: 2023/09/04 18:35:00 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/04 23:13:19 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,8 @@ int	parsing_main(t_game *game, char *map)
 		return (1);
 	if (ft_strncmp(&map[ft_strlen(map) - 4], ".cub", ft_strlen(map)))
 		return (1);
-	printf("color check : %d\n", rtrn += clrs_and_textures_check(fd, game));
-	printf("map check : %d\n", rtrn += map_check(fd, game));
+	rtrn += clrs_and_textures_check(fd, game);
+	rtrn += map_check(fd, game);
 	close(fd);
 	return (rtrn);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
+/*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:05:54 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/04 20:41:46 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/09/05 00:23:33 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	draw_game(t_game *game)
 	t_vector2i	b;
 	t_vector2i	p;	
 
+	// mlx_delete_image(game->mlx, game->map.img);
+	// game->map.img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
 	a.x = 0;
 	a.y = 0;
 	b.x = WIDTH;
@@ -33,6 +35,9 @@ void	draw_game(t_game *game)
 	p.y = game->player.pos.y / game->map.scale;
 	draw_circle(game->map.img, p, 2, 0x11FF00FF);
 	draw_walls(game);
+	// if (!game->map.img
+	// 	|| mlx_image_to_window(game->mlx, game->map.img, 0, 0) < 0)
+	// 	return ;
 }
 
 void	hookloop(void *param)
@@ -59,12 +64,13 @@ void	hookloop(void *param)
 	{
 		mlx_close_window(game->mlx);
 		free_arr(game->map.map);
+		exit(1);
 	}
 }
 
 void	init_game(t_game *game)
 {
-	game->fov = 70;
+	game->fov = 60;
 	game->column_size = 1;
 	game->map.scale = 5;
 	game->player.img_pos.x = 0; 
@@ -93,7 +99,8 @@ int	main(int ac, char **av)
 		game.player.tex = mlx_load_png("img/doom_shroom2.png");
 		if (!game.img || mlx_image_to_window(game.mlx, game.img, 0, 0) < 0)
 			return (0);
-		if (!game.img || mlx_image_to_window(game.mlx, game.map.img, 0, 0) < 0)
+		if (!game.map.img
+			|| mlx_image_to_window(game.mlx, game.map.img, 0, 0) < 0)
 			return (0);
 		mlx_loop_hook(game.mlx, hookloop, &game);
 		mlx_loop(game.mlx);

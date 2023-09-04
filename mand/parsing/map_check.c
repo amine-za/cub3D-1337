@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 23:42:42 by azaghlou          #+#    #+#             */
-/*   Updated: 2023/09/02 23:40:19 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/05 00:15:26 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,11 @@ int	check_around_a_char(char **map, int j, int i, char c)
 {
 	if (map[j][i] == c)
 	{
-		if (i > ft_strlen(map[j - 1]) || map[j - 1][i] == ' ' || map[j
-			- 1][i] == '\n')
+		if ((j == 0 || i > ft_strlen(map[j - 1])) || 
+			map[j - 1][i] == ' ' || map[j - 1][i] == '\n')
 			return (1);
-		if (i > ft_strlen(map[j + 1]) || map[j + 1][i] == ' ' || map[j
-			+ 1][i] == '\n')
+		if ((!map[j + 1] || i > ft_strlen(map[j + 1])) || 
+			map[j + 1][i] == ' ' || map[j + 1][i] == '\n')
 			return (1);
 		if (i == 0 || map[j][i - 1] == ' ' || map[j][i - 1] == '\n')
 			return (1);

@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 23:02:02 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/04 20:11:22 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/05 00:41:16 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	horizon_ray(t_game *game, t_ray *ray)
 	ray->dof = game->map.size.x * game->map.size.y;
 	if (ray->angel > 180)
 	{
-		ray->ray.y = ((int) p.y / ts) * ts - 0.001;
+		ray->ray.y = (((int) p.y / ts) * ts) - 0.1;
 		ray->ray.x = -(p.y - ray->ray.y) / tan(ray->angel * DR) + p.x;
 		ray->step.y = -ts;
 		ray->step.x = -ts / tan(ray->angel * DR);
@@ -52,7 +52,7 @@ void	vertical_ray(t_game *game, t_ray *ray)
 	ray->dof = game->map.size.x * game->map.size.y;
 	if (ray->angel > 90 && ray->angel < 270)
 	{
-		ray->ray.x = ((int) p.x / ts) * ts - 0.001;
+		ray->ray.x = (((int) p.x / ts) * ts) - 0.1;
 		ray->ray.y = -(p.x - ray->ray.x) * tan(ray->angel * DR) + p.y;
 		ray->step.x = -ts;
 		ray->step.y = -ts * tan(ray->angel * DR);
@@ -76,8 +76,8 @@ t_vector2f	cast_rays(t_game *game, t_ray *ray)
 	outray.y = (game->map.size.x * game->map.size.y) * 10;
 	while (ray->dof > 0)
 	{
-		ray->tile.x = ray->ray.x / game->tile_size;
-		ray->tile.y = ray->ray.y / game->tile_size;
+		ray->tile.x = (int) ray->ray.x / game->tile_size;
+		ray->tile.y = (int) ray->ray.y / game->tile_size;
 		if (ray->tile.x >= 0 && ray->tile.y >= 0 
 			&& ray->tile.y < game->map.size.y
 			&& ray->tile.x <= ft_strlen(game->map.map[ray->tile.y])
@@ -95,6 +95,7 @@ t_vector2f	cast_rays(t_game *game, t_ray *ray)
 	}
 	return (outray);
 }
+#include <stdio.h>
 
 int	distance(t_game *game, t_vector2f hray, t_vector2f vray, t_ray *ray)
 {
@@ -119,7 +120,8 @@ int	distance(t_game *game, t_vector2f hray, t_vector2f vray, t_ray *ray)
 	ray->pos_in_tile.x = ray->ray.x - (ray->tile.x * game->tile_size);
 	ray->pos_in_tile.y = ray->ray.y - (ray->tile.y * game->tile_size);
 	ray->dst = ray->dst * cos(fish * DR);
-	draw_rays(game, ray->ray);
+	printf("%f, %f\n", ray->ray.x, ray->ray.y);
+	draw_rays(game, ray->ray, 0xaa1a00ff);
 	return (ray->dst);
 }
 
@@ -135,10 +137,12 @@ void	draw_walls(t_game *game)
 	ray.angel = circle(game->player.rot - (float) game->fov / 2);
 	while (x < WIDTH - 1)
 	{
-		if (ray.angel != 180 && ray.angel != 0)
+		// ray.ray.x = game->player.pos.x - 1;
+		// ray.ray.y = game->player.pos.y - 1;
+		// if (ray.angel != 180 && ray.angel != 0)
 			horizon_ray(game, &ray);
 		hray = cast_rays(game, &ray);
-		if (ray.angel != 90 && ray.angel != 270)
+		// if (ray.angel != 90 && ray.angel != 270)
 			vertical_ray(game, &ray);
 		vray = cast_rays(game, &ray);
 		distance(game, hray, vray, &ray);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_texture.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
+/*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 23:28:17 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/04 20:44:01 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/09/05 00:45:48 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,14 @@ void	draw_texture(t_game *game, t_ray ray, t_vector2i a)
 {
 	t_vector2f	wall;
 
+	game->tex = game->map.tex[0];
+	wall.x = ray.pos_in_tile.x;
 	if (ray.pos_in_tile.y == 0)
 	{
 		game->tex = game->map.tex[0];
 		wall.x = ray.pos_in_tile.x;
 	}
-	if (ray.pos_in_tile.y >= game->tile_size - 0.01)
+	if (ray.pos_in_tile.y >= game->tile_size - 0.11)
 	{
 		game->tex = game->map.tex[1];
 		wall.x = ray.pos_in_tile.x;
@@ -60,7 +62,7 @@ void	draw_texture(t_game *game, t_ray ray, t_vector2i a)
 		game->tex = game->map.tex[2];
 		wall.x = ray.pos_in_tile.y;
 	}
-	if (ray.pos_in_tile.x >= game->tile_size - 0.01)
+	if (ray.pos_in_tile.x >= game->tile_size - 0.11)
 	{
 		game->tex = game->map.tex[3];
 		wall.x = ray.pos_in_tile.y;
@@ -68,7 +70,6 @@ void	draw_texture(t_game *game, t_ray ray, t_vector2i a)
 	texture_to_image(game, ray, a, wall);
 }
 
-//draw_cube(game->img, a, b, 0xAAAAAAFF);
 void	draw_colum(t_game *game, int x, t_ray ray)
 {
 	t_vector2i	a;
@@ -85,12 +86,12 @@ void	draw_colum(t_game *game, int x, t_ray ray)
 	a.y = (HEIGHT / 2) - (h / 2);
 	b.x = x + c;
 	b.y = (HEIGHT / 2) + (h / 2);
-	if (a.y < 5)
-		a.y = 5;
-	if (b.y > HEIGHT - 5)
-		b.y = HEIGHT - 5;
-	if (a.x > 0 && a.x < WIDTH && a.y > 0 && a.y < HEIGHT
-		&& b.x > 0 && b.x < WIDTH && b.y > 0 && b.y < HEIGHT)
+	if (a.y < 0)
+		a.y = 0;
+	if (b.y > HEIGHT - 1)
+		b.y = HEIGHT - 1;
+	if (a.x >= 0 && a.x < WIDTH && a.y >= 0 && a.y < HEIGHT
+		&& b.x >= 0 && b.x < WIDTH && b.y >= 0 && b.y < HEIGHT)
 	{
 		draw_texture(game, ray, a);
 	}

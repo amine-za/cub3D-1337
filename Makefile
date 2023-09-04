@@ -42,7 +42,7 @@ $(NAME): $(OBJ) $(UTILS)
 	$(CC) $(OBJ) $(UTILS) $(LIBS) -o $(NAME)
 
 $(BONUS): $(OBJ_BNS) $(UTILS_BNS)
-	$(CC) $(OBJ_BNS) $(UTILS_BNS) $(LIBS) -o $(BONUS)
+	$(CC) -fsanitize=address -g $(OBJ_BNS) $(UTILS_BNS) $(LIBS) -o $(BONUS)
 
 clean:
 	@rm -f $(OBJ) $(OBJ_BNS) $(UTILS) $(UTILS_BNS)
@@ -56,4 +56,8 @@ re: fclean all
 
 my: re 
 	@rm -f $(OBJ) $(UTILS) $(OBJ_BNS) $(UTILS_BNS) 
+	clear
+
+my_bonus : fclean bonus
+	@rm -f $(OBJ) $(UTILS) $(OBJ_BNS) $(UTILS_BNS)
 	clear

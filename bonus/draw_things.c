@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_things.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
+/*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 19:45:58 by azaghlou          #+#    #+#             */
-/*   Updated: 2023/09/04 20:42:10 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/09/05 00:50:27 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,9 @@ void	draw_cube(mlx_image_t *img, t_vector2i start, t_vector2i end, int color)
 		v.y = start.y;
 		while (v.y <= end.y)
 		{
-			mlx_put_pixel(img, v.x, v.y, color);
+			if (v.x >= 0 && v.y >= 0
+				&& v.x < (int) img->width && v.y < (int) img->height) 
+				mlx_put_pixel(img, v.x, v.y, color);
 			v.y++;
 		}
 		v.x++;
@@ -81,7 +83,7 @@ void	draw_circle(mlx_image_t *img, t_vector2i center, int r, int clr)
 	}
 }
 
-void	draw_rays(t_game *game, t_vector2f ray)
+void	draw_rays(t_game *game, t_vector2f ray, int clr)
 {
 	int			s;
 	t_vector2f	pp;
@@ -93,7 +95,7 @@ void	draw_rays(t_game *game, t_vector2f ray)
 	pp.x = game->player.pos.x / s;
 	pp.y = game->player.pos.y / s;
 	if (r.x > 0 && r.y > 0 && r.x < WIDTH && r.y < HEIGHT)
-		draw_line(game->map.img, pp, r, 0xFF0000FF);
+		draw_line(game->map.img, pp, r, clr);
 }
 
 void	draw_map(t_game *game)
