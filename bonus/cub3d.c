@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:05:54 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/01 23:38:00 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/04 18:17:58 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,23 +102,26 @@ int	main(int ac, char **av)
 {
 	t_game	game;
 
-	game.tile_size = 30;
-	if (ac != 2 || parsing_main(&game, av[1]))
+	if (ac == 2)
 	{
-		write(2, "Error\n", 6);
-		exit(1);
+		game.tile_size = 30;
+		if (parsing_main(&game, av[1]))
+		{
+			write(2, "Error\n", 6);
+			exit(1);
+		}
+		init_game(&game);
+		game.mlx = mlx_init(WIDTH, HEIGHT, "mossy rocks", true);
+		game.img = mlx_new_image(game.mlx, WIDTH, HEIGHT);
+		game.map.img = mlx_new_image(game.mlx, WIDTH, HEIGHT);
+		game.player.img = mlx_new_image(game.mlx, WIDTH, HEIGHT);
+		game.player.tex = mlx_load_png("img/doom_shroom2.png");
+		if (!game.img || mlx_image_to_window(game.mlx, game.img, 0, 0) < 0)
+			return (0);
+		if (!game.img || mlx_image_to_window(game.mlx, game.map.img, 0, 0) < 0)
+			return (0);
+		mlx_loop_hook(game.mlx, hookloop, &game);
+		mlx_loop(game.mlx);
+		mlx_terminate(game.mlx);
 	}
-	init_game(&game);
-	game.mlx = mlx_init(WIDTH, HEIGHT, "mossy rocks", true);
-	game.img = mlx_new_image(game.mlx, WIDTH, HEIGHT);
-	game.map.img = mlx_new_image(game.mlx, WIDTH, HEIGHT);
-	game.player.img = mlx_new_image(game.mlx, WIDTH, HEIGHT);
-	game.player.tex = mlx_load_png("img/doom_shroom2.png");
-	if (!game.img || mlx_image_to_window(game.mlx, game.img, 0, 0) < 0)
-		return (0);
-	if (!game.img || mlx_image_to_window(game.mlx, game.map.img, 0, 0) < 0)
-		return (0);
-	mlx_loop_hook(game.mlx, hookloop, &game);
-	mlx_loop(game.mlx);
-	mlx_terminate(game.mlx);
 }

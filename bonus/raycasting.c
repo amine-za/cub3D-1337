@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 23:02:02 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/01 23:09:55 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/04 18:19:12 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,6 @@ t_vector2f	cast_rays(t_game *game, t_ray *ray)
 {
 	t_vector2f	outray;
 
-	outray.x = (game->map.size.x * game->map.size.y) * 10;
-	outray.y = (game->map.size.x * game->map.size.y) * 10;
 	while (ray->dof > 0)
 	{
 		ray->tile.x = ray->ray.x / game->tile_size;
