@@ -4,8 +4,7 @@ BONUS = cub3D_bonus
 CC = gcc
 CFLAGS	:= -Wall -Wextra -Werror
 
-LIBS = MLX42/libmlx42.a MLX42/libglfw3.a -Iinclude -pthread -lm -framework Cocoa -framework OpenGL -framework IOKit
-#-Iinclude -ldl -lglfw -pthread -lm
+LIBS = MLX42/libmlx42.a MLX42/libglfw3.a -Iinclude -lm -framework Cocoa -framework OpenGL -framework IOKit
 
 HEADERS = cub3d.h
 
@@ -40,7 +39,7 @@ bonus: $(BONUS)
 	@echo $(B)
 
 $(NAME): $(OBJ) $(UTILS)
-	$(CC) -fsanitize=address -g $(OBJ) $(UTILS) $(LIBS) -o $(NAME)
+	$(CC) $(OBJ) $(UTILS) $(LIBS) -o $(NAME)
 
 $(BONUS): $(OBJ_BNS) $(UTILS_BNS)
 	$(CC) $(OBJ_BNS) $(UTILS_BNS) $(LIBS) -o $(BONUS)

@@ -3,42 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   draw_texture.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 23:28:17 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/01 23:17:29 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/04 20:48:49 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-void	player_to_image(t_game *game, t_vector2i img_pos, float sx, float sy)
-{
-	mlx_texture_t	*tex;
-	uint8_t			*pixelx;
-	uint8_t			*pixeli;
-	int				i;
-	int				j;
-
-	tex = game->player.tex;
-	j = -1;
-	while (++j * sx < tex->width)
-	{
-		i = -1;
-		while (++i * sy < tex->height)
-		{
-			if ((i + img_pos.y) < HEIGHT && (j + img_pos.x) < WIDTH)
-			{
-				pixelx = &tex->pixels[(((int)(i * sy) *tex->width) 
-						+ (int)(j * sx)) * tex->bytes_per_pixel];
-				pixeli = &game->player.img->pixels[((i + img_pos.y) 
-						* game->player.img->width + (j + img_pos.x))
-					* tex->bytes_per_pixel];
-				ft_memmove(pixeli, pixelx, tex->bytes_per_pixel);
-			}
-		}
-	}
-}
 
 void	texture_to_image(t_game *game, t_ray ray, t_vector2i a, t_vector2f wall)
 {
@@ -96,7 +68,6 @@ void	draw_texture(t_game *game, t_ray ray, t_vector2i a)
 	texture_to_image(game, ray, a, wall);
 }
 
-//draw_cube(game->img, a, b, 0xAAAAAAFF);
 void	draw_colum(t_game *game, int x, t_ray ray)
 {
 	t_vector2i	a;

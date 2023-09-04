@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_things.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 19:45:58 by azaghlou          #+#    #+#             */
-/*   Updated: 2023/09/04 18:18:56 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/04 20:42:10 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	draw_cube(mlx_image_t *img, t_vector2i start, t_vector2i end, int color)
 	}
 }
 
-void	draw_circle(t_game *game, t_vector2i center, int r, int clr)
+void	draw_circle(mlx_image_t *img, t_vector2i center, int r, int clr)
 {
 	int		x;
 	int		y;
@@ -72,7 +72,9 @@ void	draw_circle(t_game *game, t_vector2i center, int r, int clr)
 		{
 			x = center.x + r * cos(deg * DR);
 			y = center.y + r * sin(deg * DR);
-			mlx_put_pixel(game->map.img, x, y, clr);
+			if (x >= 0 && y >= 0
+				&& x < (int) img->width && y < (int) img->height) 
+				mlx_put_pixel(img, x, y, clr);
 			deg += 0.2;
 		}
 		r--;

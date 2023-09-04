@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:05:54 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/04 20:13:22 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/04 20:41:46 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	draw_game(t_game *game)
 	draw_map(game);
 	p.x = game->player.pos.x / game->map.scale;
 	p.y = game->player.pos.y / game->map.scale;
-	draw_circle(game, p, 2, 0x11FF00FF);
+	draw_circle(game->map.img, p, 2, 0x11FF00FF);
 	draw_walls(game);
 }
 

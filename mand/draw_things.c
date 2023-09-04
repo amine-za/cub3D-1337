@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_things.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 19:45:58 by azaghlou          #+#    #+#             */
-/*   Updated: 2023/09/02 01:11:12 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/04 20:47:34 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ void	draw_cube(mlx_image_t *img, t_vector2i start, t_vector2i end, int color)
 		v.y = start.y;
 		while (v.y <= end.y)
 		{
-			if (v.x >= 0 && v.y >= 0 && v.x < (int) img->width && v.y < (int) img->height) 
+			if (v.x >= 0 && v.y >= 0
+				&& v.x < (int) img->width && v.y < (int) img->height) 
 				mlx_put_pixel(img, v.x, v.y, color);
 			v.y++;
 		}
@@ -73,7 +74,8 @@ void	draw_circle(mlx_image_t *img, t_vector2i center, int r, int clr)
 		{
 			x = center.x + r * cos(deg * DR);
 			y = center.y + r * sin(deg * DR);
-			if (x >= 0 && y >= 0 && x < (int) img->width && y < (int) img->height) 
+			if (x >= 0 && y >= 0
+				&& x < (int) img->width && y < (int) img->height) 
 				mlx_put_pixel(img, x, y, clr);
 			deg += 0.2;
 		}
