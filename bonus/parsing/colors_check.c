@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rgb_colors.c                                       :+:      :+:    :+:   */
+/*   colors_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 16:14:00 by azaghlou          #+#    #+#             */
-/*   Updated: 2023/09/01 16:20:41 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/04 18:04:03 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ int	comma_condition(char *rgb, int *j, char *nbr, int *comma_nbr)
 		comma_nbr[0]++;
 		if (comma_nbr[0] > 2)
 			return (1);
-		if (ft_atoi(nbr) > 255)
-			return (1);
 		ft_bzero(nbr, ft_strlen(nbr));
 	}
 	return (0);
@@ -31,7 +29,7 @@ int	comma_condition(char *rgb, int *j, char *nbr, int *comma_nbr)
 /* A function that being called by the one below it and take colors code
 as strings and convert them to int and count and return the final result
 the color code				  										  */
-unsigned int	color_code(char **ar)
+int	color_code(char **ar)
 {
 	t_rgb	t;
 
@@ -39,12 +37,14 @@ unsigned int	color_code(char **ar)
 	t.r = ft_atoi(ar[0]);
 	t.g = ft_atoi(ar[1]);
 	t.b = ft_atoi(ar[2]);
+	if (t.r > 255 || t.g > 255 || t.b > 255)
+		return (-1);
 	free_arr(ar);
 	return (rgb2int(t));
 }
 
 // Take the rgb code as string and return the real color code
-unsigned int	read_rgb(char *rgb)
+int	read_rgb(char *rgb)
 {
 	int		i;
 	char	*pntr;
@@ -58,7 +58,7 @@ unsigned int	read_rgb(char *rgb)
 	{
 		while (rgb[i + 1] && (rgb[i + 1] == ' ' || rgb[i + 1] == '\t'))
 			i++;
-		if (rgb[++i] == ',')
+		if (rgb[i + 1] == ',')
 		{
 			if (comma_num == 0)
 				pntr = &ar[1][0];
@@ -85,7 +85,7 @@ int	rgb_check(char *rgb)
 	i = -1;
 	j = 0;
 	comma_nbr = 0;
-	if (rgb[0] != ' ')
+	if (rgb[0] != ' ' && rgb[0] != '\t')
 		return (1);
 	nbr = ft_calloc(1, ft_strlen(rgb));
 	while (rgb[++i] && rgb[i] != '\n')
@@ -112,14 +112,20 @@ int	colors(char *line, int indx, int *result, t_game *game)
 		if (rgb_check(&line[indx + 1]))
 			return (1);
 		game->map.col[0] = read_rgb(&line[indx + 1]);
+		if (game->map.col[0] == -1)
+			return (1);
 		result[4]++;
+		return (0);
 	}
 	if (line[indx] && line[indx] == 'C')
 	{
 		if (rgb_check(&line[indx + 1]))
 			return (1);
 		game->map.col[1] = read_rgb(&line[indx + 1]);
+		if (game->map.col[1] == -1)
+			return (1);
 		result[5]++;
+		return (0);
 	}
-	return (0);
+	return (1);
 }

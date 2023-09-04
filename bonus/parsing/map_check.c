@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 23:42:42 by azaghlou          #+#    #+#             */
-/*   Updated: 2023/09/02 00:41:54 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/02 23:40:19 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	**map_to_ar(int fd)
 	{
 		i = 0;
 		if (line == NULL)
-			return (NULL);
+			return (free_arr(map), NULL);
 		while (line[i] && (space_tabe(line[i]) || line[i] == '\n'))
 			i++;
 		if (line[i])
@@ -121,16 +121,16 @@ int	map_check(int fd, t_game *game)
 		return (1);
 	game->map.map = map;
 	if (check_line(map[++j]))
-		return (free_arr(map), 1);
+		return (free_arr(map), 2);
 	while (map[++j])
 	{
 		if (loop_on_map(map, game, j, &x))
-			return (free_arr(map), 1);
+			return (free_arr(map), 3);
 	}
 	if (check_line(map[j - 1]))
-		return (free_arr(map), 1);
+		return (free_arr(map), 4);
 	if (x != 1)
-		return (free_arr(map), 1);
+		return (free_arr(map), 5);
 	game->map.size.y = j;
 	game->map.size.x = tallest_line_length(map);
 	return (0);
