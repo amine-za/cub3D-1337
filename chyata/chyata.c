@@ -2,6 +2,26 @@
 
 # include "cub3d.h"
 
+void    resize(int width, int height, void *param)
+{
+    t_game  *game;
+
+    game = (t_game *)param;
+    game->width = width;
+    game->height = height;
+    //printf("x = %d, y = %d\n", width, height);
+    mlx_delete_image(game->mlx, game->img);
+    mlx_delete_image(game->mlx, game->map.img);
+    //fprintf(stderr, "%s", mlx_strerror(mlx_errno));
+    game->img = mlx_new_image(game->mlx, game->width, game->height);
+    game->map.img = mlx_new_image(game->mlx, game->width, game->height);
+    draw_game(game);
+    if (!game->img || (mlx_image_to_window(game->mlx, game->img, 0, 0) < 0))
+        return ;
+    if (!game->map.img || mlx_image_to_window(game->mlx, game->map.img, 0, 0) < 0)
+        return ;
+}
+
 void	render(t_game *game)
 {
 	mlx_delete_image(game->mlx, game->img);

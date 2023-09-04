@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:07:33 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/01 16:49:16 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/04 17:18:33 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,13 +111,13 @@ typedef	struct	s_ray {
 typedef struct s_game {
 	t_map			map;
 	t_player		player;
-	t_vector2i		window;
+	int				width;
+	int				height;
 	int				tile_size;
 	int				column_size;
 	int				fov;
 	mlx_texture_t	*tex;
 	mlx_image_t		*img;
-	mlx_image_t		*ui;
 	mlx_t			*mlx;
 }               t_game;
 
@@ -144,7 +144,9 @@ void	move_down(t_game *game, t_vector2f pd);
 void	move_right(t_game *game, t_vector2f pd);
 void	move_left(t_game *game, t_vector2f pd);
 
-void	draw_circle(t_game *game, t_vector2i center, int r, int clr);
+float	scale(t_game *game);
+void	resize(int width, int height, void *param);
+void	draw_circle(mlx_image_t *img, t_vector2i center, int r, int clr);
 void	draw_rays(t_game *game, t_vector2f ray);
 void	draw_cube(mlx_image_t *img, t_vector2i start, t_vector2i end, int color);
 void    draw_line(mlx_image_t *img, t_vector2f p0, t_vector2f p1, int clr);
@@ -156,6 +158,7 @@ void	draw_walls(t_game *game);
 void	draw_game(t_game *game);
 void	draw_map(t_game *game);
 void	rycasting(t_game *game);
+
 int		space_tabe(char c);
 int     ft_isdigit(int c);
 int		rgb_check(char *rgb);

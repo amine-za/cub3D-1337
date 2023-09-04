@@ -3,6 +3,7 @@ NAME = cub3d
 #CFLAGS	:= -Wall -Wextra -Werror
 
 LIBS = MLX42/libmlx42.a MLX42/libglfw3.a -Iinclude -pthread -lm -framework Cocoa -framework OpenGL -framework IOKit
+# -fsanitize=address -g
 #-Iinclude -ldl -lglfw -pthread -lm
 
 HEADERS = cub3d.h

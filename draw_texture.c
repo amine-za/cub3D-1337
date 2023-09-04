@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_texture.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yhachami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 23:28:17 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/01 16:08:36 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/09/04 17:36:31 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 void	player_to_image(t_game *game, t_vector2i img_pos, float sx, float sy)
 {
 	mlx_texture_t	*tex;
-	uint8_t			*pixelx;
-	uint8_t			*pixeli;
+	uint8_t			*pxx;
+	uint8_t			*pxi;
 	int				i;
 	int				j;
 
@@ -27,17 +27,45 @@ void	player_to_image(t_game *game, t_vector2i img_pos, float sx, float sy)
 		i = -1;
 		while (++i * sy < tex->height)
 		{
-			if ((i + img_pos.y) < HEIGHT && (j + img_pos.x) < WIDTH)
+			if ((i + img_pos.y) < game->player.img->height
+				&& (j + img_pos.x) < game->player.img->width)
 			{
-				pixelx = &tex->pixels[(((int)(i * sy) *tex->width) 
+				pxx = &tex->pixels[(((int)(i * sy) *tex->width) 
 						+ (int)(j * sx)) * tex->bytes_per_pixel];
-				pixeli = &game->player.img->pixels[((i + img_pos.y) 
+				pxi = &game->player.img->pixels[((i + img_pos.y) 
 						* game->player.img->width + (j + img_pos.x))
 					* tex->bytes_per_pixel];
-				ft_memmove(pixeli, pixelx, tex->bytes_per_pixel);
+				ft_memmove(pxi, pxx, tex->bytes_per_pixel);
 			}
 		}
 	}
+}
+
+void	draw_player(t_game *game)
+{
+	t_vector2i	img_pos;
+	float		s;
+
+	mlx_delete_image(game->mlx, game->player.img);
+	game->player.img = mlx_new_image(game->mlx, game->width, game->height);
+	s = scale(game);
+	game->player.img_pos.x += 1 * game->player.img_mult.x;
+	img_pos.x = (game->width / 2) - game->player.img_pos.x;
+	if (game->player.img_pos.x > 70)
+		game->player.img_mult.x = -1;
+	if (game->player.img_pos.x < -70)
+		game->player.img_mult.x = 1;
+	game->player.img_pos.y += 1 * game->player.img_mult.y;
+	img_pos.y = game->height - (game->player.tex->height / s)
+		- game->player.img_pos.y;
+	if (game->player.img_pos.y > -1)
+		game->player.img_mult.y = -1;
+	if (game->player.img_pos.y < -120)
+		game->player.img_mult.y = 1;
+	player_to_image(game, img_pos, s, s);
+	if (!game->player.img
+		|| mlx_image_to_window(game->mlx, game->player.img, 0, 0) < 0)
+		return ;
 }
 
 void	texture_to_image(t_game *game, t_ray ray, t_vector2i a, t_vector2f wall)
@@ -50,13 +78,13 @@ void	texture_to_image(t_game *game, t_ray ray, t_vector2i a, t_vector2f wall)
 
 	tex = game->tex;
 	wall.y = 1;
-	if (ray.wall_height > HEIGHT)
-		wall.y = ((HEIGHT - ray.wall_height) / 2);
+	if (ray.wall_height > game->height)
+		wall.y = ((game->height - ray.wall_height) / 2);
 	r.x = (float) wall.x * (tex->width / game->tile_size);
 	i = 0;
-	while (i < ray.wall_height && i < HEIGHT)
+	while (i < ray.wall_height && i < game->height)
 	{
-		r.y = (float)(i - wall.y) * (tex->height / ray.wall_height);
+		r.y = (float)(i - wall.y) *(tex->height / ray.wall_height);
 		if ((((int) r.y * tex->width) + (int) r.x) < (tex->width * tex->height))
 		{
 			pixelx = &tex->pixels[((((int) r.y) * tex->width)
@@ -96,7 +124,6 @@ void	draw_texture(t_game *game, t_ray ray, t_vector2i a)
 	texture_to_image(game, ray, a, wall);
 }
 
-//draw_cube(game->img, a, b, 0xAAAAAAFF);
 void	draw_colum(t_game *game, int x, t_ray ray)
 {
 	t_vector2i	a;
@@ -105,20 +132,20 @@ void	draw_colum(t_game *game, int x, t_ray ray)
 	int			h;
 
 	c = game->column_size;
-	ray.wall_height = (game->tile_size * HEIGHT) / ray.dst;
+	ray.wall_height = (game->tile_size * game->height) / ray.dst;
 	h = ray.wall_height;
-	if (h > HEIGHT)
-		h = HEIGHT;
+	if (h > game->height)
+		h = game->height;
 	a.x = x;
-	a.y = (HEIGHT / 2) - (h / 2);
+	a.y = (game->height / 2) - (h / 2);
 	b.x = x + c;
-	b.y = (HEIGHT / 2) + (h / 2);
-	if (a.y < 5)
-		a.y = 5;
-	if (b.y > HEIGHT - 5)
-		b.y = HEIGHT - 5;
-	if (a.x > 0 && a.x < WIDTH && a.y > 0 && a.y < HEIGHT
-		&& b.x > 0 && b.x < WIDTH && b.y > 0 && b.y < HEIGHT)
+	b.y = (game->height / 2) + (h / 2);
+	if (a.y < 1)
+		a.y = 1;
+	if (b.y > game->height - 1)
+		b.y = game->height - 1;
+	if (a.x >= 0 && a.x < game->width && a.y >= 0 && a.y < game->height
+		&& b.x >= 0 && b.x < game->width && b.y >= 0 && b.y < game->height)
 	{
 		draw_texture(game, ray, a);
 	}

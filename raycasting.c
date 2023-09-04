@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yhachami <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 23:02:02 by yhachami          #+#    #+#             */
-/*   Updated: 2023/08/31 06:49:36 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/09/02 00:29:32 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ t_vector2f	cast_rays(t_game *game, t_ray *ray)
 {
 	t_vector2f	outray;
 
+	outray.x = 10000;
+	outray.y = 10000;
 	while (ray->dof > 0)
 	{
 		ray->tile.x = ray->ray.x / game->tile_size;
@@ -129,9 +131,9 @@ void	draw_walls(t_game *game)
 	int			x;
 
 	x = 0;
-	ray.angel_step = (float) game->fov / (WIDTH / game->column_size);
+	ray.angel_step = (float) game->fov / (game->width / game->column_size);
 	ray.angel = circle(game->player.rot - (float) game->fov / 2);
-	while (x < WIDTH - 1)
+	while (x < game->width - 1)
 	{
 		if (ray.angel != 180 && ray.angel != 0)
 			horizon_ray(game, &ray);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_things.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 19:45:58 by azaghlou          #+#    #+#             */
-/*   Updated: 2023/09/01 15:32:14 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/02 00:31:40 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,15 @@ void	draw_cube(mlx_image_t *img, t_vector2i start, t_vector2i end, int color)
 		v.y = start.y;
 		while (v.y <= end.y)
 		{
-			mlx_put_pixel(img, v.x, v.y, color);
+			if (v.x >= 0 && v.y >= 0 && v.x < img->width && v.y < img->height) 
+				mlx_put_pixel(img, v.x, v.y, color);
 			v.y++;
 		}
 		v.x++;
 	}
 }
 
-void	draw_circle(t_game *game, t_vector2i center, int r, int clr)
+void	draw_circle(mlx_image_t *img, t_vector2i center, int r, int clr)
 {
 	int		x;
 	int		y;
@@ -72,7 +73,8 @@ void	draw_circle(t_game *game, t_vector2i center, int r, int clr)
 		{
 			x = center.x + r * cos(deg * DR);
 			y = center.y + r * sin(deg * DR);
-			mlx_put_pixel(game->map.img, x, y, clr);
+			if (x >= 0 && y >= 0 && x < img->width && y < img->height) 
+				mlx_put_pixel(img, x, y, clr);
 			deg += 0.2;
 		}
 		r--;
@@ -90,7 +92,7 @@ void	draw_rays(t_game *game, t_vector2f ray)
 	r.y = ray.y / s;
 	pp.x = game->player.pos.x / s;
 	pp.y = game->player.pos.y / s;
-	if (r.x > 0 && r.y > 0 && r.x < WIDTH && r.y < HEIGHT)
+	if (r.x > 0 && r.y > 0 && r.x < game->width && r.y < game->height)
 		draw_line(game->map.img, pp, r, 0xFF0000FF);
 }
 
