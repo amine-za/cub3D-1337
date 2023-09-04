@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:07:33 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/04 18:38:20 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/04 20:12:23 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ int		space_tabe(char c);
 int     ft_isdigit(int c);
 int		rgb_check(char *rgb);
 int		space_tabe(char c);
-int		finished_that_check(int *result);
+int		finished_that_check(int *result, char *line);
 void	fill_int_arry_with_zero(int *result);
 int		clrs(char *line, int indx, int *result, t_game *game);
 void	free_arr(char **ar);

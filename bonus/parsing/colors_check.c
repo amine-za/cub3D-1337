@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 16:14:00 by azaghlou          #+#    #+#             */
-/*   Updated: 2023/09/04 18:30:35 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/04 20:12:56 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ int	clrs(char *line, int indx, int *result, t_game *game)
 		if (rgb_check(&line[indx + 1]))
 			return (1);
 		game->map.col[0] = read_rgb(&line[indx + 1]);
-		if (game->map.col[0] == -1)
+		if (game->map.col[0] == (unsigned int) -1)
 			return (1);
 		result[4]++;
 		return (0);
@@ -122,7 +122,7 @@ int	clrs(char *line, int indx, int *result, t_game *game)
 		if (rgb_check(&line[indx + 1]))
 			return (1);
 		game->map.col[1] = read_rgb(&line[indx + 1]);
-		if (game->map.col[1] == -1)
+		if (game->map.col[1] == (unsigned int) -1)
 			return (1);
 		result[5]++;
 		return (0);

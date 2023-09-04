@@ -6,35 +6,11 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:05:54 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/04 18:17:58 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/04 20:13:22 by azaghlou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-void	draw_player(t_game *game)
-{
-	t_vector2i	img_pos;
-
-	mlx_delete_image(game->mlx, game->player.img);
-	game->player.img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
-	game->player.img_pos.x += 1.2 * game->player.img_mult.x;
-	img_pos.x = (WIDTH / 2) - game->player.img_pos.x;
-	if (game->player.img_pos.x > 70)
-		game->player.img_mult.x = -1;
-	if (game->player.img_pos.x < -70)
-		game->player.img_mult.x = 1;
-	game->player.img_pos.y += 1 * game->player.img_mult.y;
-	img_pos.y = HEIGHT - (game->player.tex->height / 2)
-		- game->player.img_pos.y;
-	if (game->player.img_pos.y > -1)
-		game->player.img_mult.y = -1;
-	if (game->player.img_pos.y < -120)
-		game->player.img_mult.y = 1;
-	player_to_image(game, img_pos, 2, 2);
-	if (mlx_image_to_window(game->mlx, game->player.img, 0, 0) < 0)
-		return ;
-}
 
 void	draw_game(t_game *game)
 {
@@ -53,7 +29,6 @@ void	draw_game(t_game *game)
 	b.y = HEIGHT;
 	draw_cube(game->img, a, b, game->map.col[1]);
 	draw_map(game);
-	draw_player(game);
 	p.x = game->player.pos.x / game->map.scale;
 	p.y = game->player.pos.y / game->map.scale;
 	draw_circle(game, p, 2, 0x11FF00FF);
