@@ -6,7 +6,7 @@
 /*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 23:28:17 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/04 20:48:49 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/09/04 23:08:22 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,12 @@ void	draw_colum(t_game *game, int x, t_ray ray)
 	a.y = (HEIGHT / 2) - (h / 2);
 	b.x = x + c;
 	b.y = (HEIGHT / 2) + (h / 2);
-	if (a.y < 5)
-		a.y = 5;
-	if (b.y > HEIGHT - 5)
-		b.y = HEIGHT - 5;
-	if (a.x > 0 && a.x < WIDTH && a.y > 0 && a.y < HEIGHT
-		&& b.x > 0 && b.x < WIDTH && b.y > 0 && b.y < HEIGHT)
+	if (a.y < 0)
+		a.y = 0;
+	if (b.y > HEIGHT - 1)
+		b.y = HEIGHT - 1;
+	if (a.x >= 0 && a.x < WIDTH && a.y >= 0 && a.y < HEIGHT
+		&& b.x >= 0 && b.x < WIDTH && b.y >= 0 && b.y < HEIGHT)
 	{
 		draw_texture(game, ray, a);
 	}

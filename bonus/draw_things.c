@@ -6,7 +6,7 @@
 /*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 19:45:58 by azaghlou          #+#    #+#             */
-/*   Updated: 2023/09/04 20:42:10 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/09/04 21:04:06 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	draw_circle(mlx_image_t *img, t_vector2i center, int r, int clr)
 	}
 }
 
-void	draw_rays(t_game *game, t_vector2f ray)
+void	draw_rays(t_game *game, t_vector2f ray, int clr)
 {
 	int			s;
 	t_vector2f	pp;
@@ -93,7 +93,7 @@ void	draw_rays(t_game *game, t_vector2f ray)
 	pp.x = game->player.pos.x / s;
 	pp.y = game->player.pos.y / s;
 	if (r.x > 0 && r.y > 0 && r.x < WIDTH && r.y < HEIGHT)
-		draw_line(game->map.img, pp, r, 0xFF0000FF);
+		draw_line(game->map.img, pp, r, clr);
 }
 
 void	draw_map(t_game *game)

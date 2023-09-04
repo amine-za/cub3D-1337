@@ -6,7 +6,7 @@
 /*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 15:52:00 by azaghlou          #+#    #+#             */
-/*   Updated: 2023/09/04 20:52:53 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/09/04 23:09:25 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,9 @@ void	move_up(t_game *game, t_vector2f pd)
 void	move_down(t_game *game, t_vector2f pd)
 {
 	t_vector2i	ptile;
+	t_vector2f	p;
 
+	p = game->player.pos;
 	if (mlx_is_key_down(game->mlx, MLX_KEY_S))
 	{
 		ptile.x = (int)(p.x - pd.x * 2) / game->tile_size;

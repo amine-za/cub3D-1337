@@ -6,7 +6,7 @@
 /*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:05:54 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/04 20:41:46 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/09/04 23:04:50 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	hookloop(void *param)
 
 void	init_game(t_game *game)
 {
-	game->fov = 70;
+	game->fov = 60;
 	game->column_size = 1;
 	game->map.scale = 5;
 	game->player.img_pos.x = 0; 

@@ -6,7 +6,7 @@
 /*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:07:33 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/04 20:34:29 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/09/04 23:13:26 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-# include <stdio.h>
 
 # define WIDTH 1920
 # define HEIGHT 1080
@@ -132,7 +131,7 @@ void	move_right(t_game *game, t_vector2f pd);
 void	move_left(t_game *game, t_vector2f pd);
 
 void	draw_circle(mlx_image_t *img, t_vector2i center, int r, int clr);
-void	draw_rays(t_game *game, t_vector2f ray);
+void	draw_rays(t_game *game, t_vector2f ray, int clr);
 void	draw_cube(mlx_image_t *img, t_vector2i start, t_vector2i end,
 			int color);
 void	draw_line(mlx_image_t *img, t_vector2f p0, t_vector2f p1, int clr);
