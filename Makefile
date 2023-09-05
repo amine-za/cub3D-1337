@@ -55,7 +55,9 @@ re: fclean all
 .PHONY: all clean re
 
 my: re 
-	rm -f $(OBJ) $(UTILS) $(OBJ_BNS) $(UTILS_BNS) 
+	@rm -f $(OBJ) $(UTILS) $(OBJ_BNS) $(UTILS_BNS)
+	clear
 
 my_bonus : fclean bonus
-	rm -f $(OBJ) $(UTILS) $(OBJ_BNS) $(UTILS_BNS)
+	@rm -f $(OBJ) $(UTILS) $(OBJ_BNS) $(UTILS_BNS)
+	clear
