@@ -28,9 +28,9 @@ OBJ_BNS = ${SRC_BNS:.c=.o}
 UTILS = ${UTL:.c=.o}
 UTILS_BNS = ${UTL_BNS:.c=.o}
 
-A = " MOSSY ROCKS "
+A = "Cube 3D"
 
-B = " MOSSY ROCKS BONUS"
+B = " Cube 3D BONUS"
 
 all: $(NAME)
 	@echo $(A)
@@ -42,22 +42,20 @@ $(NAME): $(OBJ) $(UTILS)
 	$(CC) $(OBJ) $(UTILS) $(LIBS) -o $(NAME)
 
 $(BONUS): $(OBJ_BNS) $(UTILS_BNS)
-	$(CC) -fsanitize=address -g $(OBJ_BNS) $(UTILS_BNS) $(LIBS) -o $(BONUS)
+	$(CC) $(OBJ_BNS) $(UTILS_BNS) $(LIBS) -o $(BONUS)
 
 clean:
-	@rm -f $(OBJ) $(OBJ_BNS) $(UTILS) $(UTILS_BNS)
+	rm -f $(OBJ) $(OBJ_BNS) $(UTILS) $(UTILS_BNS)
 
 fclean: clean 
-	@rm -f $(NAME) $(BONUS)
+	rm -f $(NAME) $(BONUS)
 
 re: fclean all
 
 .PHONY: all clean re
 
 my: re 
-	@rm -f $(OBJ) $(UTILS) $(OBJ_BNS) $(UTILS_BNS) 
-	clear
+	rm -f $(OBJ) $(UTILS) $(OBJ_BNS) $(UTILS_BNS) 
 
 my_bonus : fclean bonus
-	@rm -f $(OBJ) $(UTILS) $(OBJ_BNS) $(UTILS_BNS)
-	clear
+	rm -f $(OBJ) $(UTILS) $(OBJ_BNS) $(UTILS_BNS)
