@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:05:54 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/05 00:23:33 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/05 20:06:51 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ void	draw_game(t_game *game)
 	t_vector2i	b;
 	t_vector2i	p;	
 
-	// mlx_delete_image(game->mlx, game->map.img);
-	// game->map.img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
 	a.x = 0;
 	a.y = 0;
 	b.x = WIDTH;
@@ -35,9 +33,6 @@ void	draw_game(t_game *game)
 	p.y = game->player.pos.y / game->map.scale;
 	draw_circle(game->map.img, p, 2, 0x11FF00FF);
 	draw_walls(game);
-	// if (!game->map.img
-	// 	|| mlx_image_to_window(game->mlx, game->map.img, 0, 0) < 0)
-	// 	return ;
 }
 
 void	hookloop(void *param)
@@ -48,11 +43,11 @@ void	hookloop(void *param)
 
 	game = (t_game *)param;
 	draw_game(game);
-	speed = 2;
+	speed = 3;
 	if (mlx_is_key_down(game->mlx, MLX_KEY_RIGHT))
-		game->player.rot += 4;
+		game->player.rot += 5;
 	if (mlx_is_key_down(game->mlx, MLX_KEY_LEFT))
-		game->player.rot -= 4;
+		game->player.rot -= 5;
 	pd.x = cos(game->player.rot * DR) * speed;
 	pd.y = sin(game->player.rot * DR) * speed;
 	move_up(game, pd);
@@ -83,27 +78,24 @@ int	main(int ac, char **av)
 {
 	t_game	game;
 
-	if (ac == 2)
+	game.tile_size = 30;
+	if (ac != 2 || parsing_main(&game, av[1]))
 	{
-		game.tile_size = 30;
-		if (parsing_main(&game, av[1]))
-		{
-			write(2, "Error\n", 6);
-			exit(1);
-		}
-		init_game(&game);
-		game.mlx = mlx_init(WIDTH, HEIGHT, "mossy rocks", true);
-		game.img = mlx_new_image(game.mlx, WIDTH, HEIGHT);
-		game.map.img = mlx_new_image(game.mlx, WIDTH, HEIGHT);
-		game.player.img = mlx_new_image(game.mlx, WIDTH, HEIGHT);
-		game.player.tex = mlx_load_png("img/doom_shroom2.png");
-		if (!game.img || mlx_image_to_window(game.mlx, game.img, 0, 0) < 0)
-			return (0);
-		if (!game.map.img
-			|| mlx_image_to_window(game.mlx, game.map.img, 0, 0) < 0)
-			return (0);
-		mlx_loop_hook(game.mlx, hookloop, &game);
-		mlx_loop(game.mlx);
-		mlx_terminate(game.mlx);
+		write(2, "Error\n", 6);
+		exit(1);
 	}
+	init_game(&game);
+	game.mlx = mlx_init(WIDTH, HEIGHT, "mossy rocks", true);
+	game.img = mlx_new_image(game.mlx, WIDTH, HEIGHT);
+	game.map.img = mlx_new_image(game.mlx, WIDTH, HEIGHT);
+	game.player.img = mlx_new_image(game.mlx, WIDTH, HEIGHT);
+	game.player.tex = mlx_load_png("img/doom_shroom2.png");
+	if (!game.img || mlx_image_to_window(game.mlx, game.img, 0, 0) < 0)
+		return (0);
+	if (!game.map.img
+		|| mlx_image_to_window(game.mlx, game.map.img, 0, 0) < 0)
+		return (0);
+	mlx_loop_hook(game.mlx, hookloop, &game);
+	mlx_loop(game.mlx);
+	mlx_terminate(game.mlx);
 }

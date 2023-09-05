@@ -6,7 +6,7 @@
 /*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 23:02:02 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/04 21:02:53 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/09/05 20:09:51 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,11 +134,9 @@ void	draw_walls(t_game *game)
 	ray.angel = circle(game->player.rot - (float) game->fov / 2);
 	while (x < WIDTH - 1)
 	{
-		if (ray.angel != 180 && ray.angel != 0)
-			horizon_ray(game, &ray);
+		horizon_ray(game, &ray);
 		hray = cast_rays(game, &ray);
-		if (ray.angel != 90 && ray.angel != 270)
-			vertical_ray(game, &ray);
+		vertical_ray(game, &ray);
 		vray = cast_rays(game, &ray);
 		distance(game, hray, vray, &ray);
 		draw_colum(game, x, ray);

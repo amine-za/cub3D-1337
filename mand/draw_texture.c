@@ -6,7 +6,7 @@
 /*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 23:28:17 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/04 23:08:22 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/09/05 20:11:30 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ void	draw_texture(t_game *game, t_ray ray, t_vector2i a)
 {
 	t_vector2f	wall;
 
+	game->tex = game->map.tex[0];
+	wall.x = ray.pos_in_tile.x;
 	if (ray.pos_in_tile.y == 0)
 	{
 		game->tex = game->map.tex[0];

@@ -6,7 +6,7 @@
 /*   By: azaghlou <azaghlou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:05:54 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/02 23:42:59 by azaghlou         ###   ########.fr       */
+/*   Updated: 2023/09/05 20:09:07 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ void	hookloop(void *param)
 
 	game = (t_game *)param;
 	draw_game(game);
-	speed = 2;
+	speed = 3;
 	if (mlx_is_key_down(game->mlx, MLX_KEY_RIGHT))
-		game->player.rot += 4;
+		game->player.rot += 5;
 	if (mlx_is_key_down(game->mlx, MLX_KEY_LEFT))
-		game->player.rot -= 4;
+		game->player.rot -= 5;
 	pd.x = cos(game->player.rot * DR) * speed;
 	pd.y = sin(game->player.rot * DR) * speed;
 	move_up(game, pd);
