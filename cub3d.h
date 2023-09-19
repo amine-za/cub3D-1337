@@ -6,14 +6,14 @@
 /*   By: yhachami <yhachami@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:07:33 by yhachami          #+#    #+#             */
-/*   Updated: 2023/09/05 19:52:47 by yhachami         ###   ########.fr       */
+/*   Updated: 2023/09/19 19:25:40 by yhachami         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "../MLX42/include/MLX42/MLX42.h"
+# include "MLX42/include/MLX42/MLX42.h"
 # include "utils/get_next_line.h"
 # include <fcntl.h>
 # include <limits.h>
